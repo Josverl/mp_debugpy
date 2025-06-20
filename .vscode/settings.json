@@ -1,0 +1,32 @@
+{
+    "peacock.remoteColor": "#be9e15",
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.analysis.extraPaths": [
+        "{$workspaceFolder}/python-ecosys/debugpy"
+    ],
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#e6c120",
+        "activityBar.background": "#e6c120",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#108f78",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#15202b99",
+        "editorGroup.border": "#e6c120",
+        "panel.border": "#e6c120",
+        "sash.hoverBorder": "#e6c120",
+        "statusBar.background": "#be9e15",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#907810",
+        "statusBarItem.remoteBackground": "#be9e15",
+        "statusBarItem.remoteForeground": "#15202b",
+        "tab.activeBorder": "#e6c120",
+        "titleBar.activeBackground": "#be9e15",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#be9e1599",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+
+}

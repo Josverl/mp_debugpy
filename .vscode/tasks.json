@@ -1,0 +1,148 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "options": {
+        "env": {
+            // make sure that debugpy can be found
+            "MICROPYPATH": "${workspaceFolder}/python-ecosys/debugpy:MICROPYPATH:~/.micropython/lib:/usr/lib/micropython",
+        },
+    },
+    "tasks": [
+        {
+            "label": "DAP_monitor",
+            "detail": "Start DAP monitor to inspect the DAP messages",
+            "type": "shell",
+            "command": "python python-ecosys/debugpy/dap_monitor.py --target-host localhost",
+            "isBackground": true,
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "dependsOn": [
+                "mp_unix_module",
+                // "mp_unix_file",
+                // "mp_esp32_upload_src",
+            ],
+            // Dummy non-empty problem matcher must be defined.
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3,
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".",
+                    }
+                }
+            ],
+        },
+        {
+            "label": "mp_unix_file",
+            "detail": "MicroPython Unix - Current File",
+            "type": "shell",
+            "command": "${workspaceFolder}/firmware/unix_debug_enabled/micropython",
+            "args": [
+                "${file}"
+            ],
+            "isBackground": true,
+            "presentation": {
+                "focus": true,
+            },
+            // Dummy non-empty problem matcher must be defined.
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3,
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".",
+                    }
+                }
+            ],
+        },
+        {
+            "label": "mp_unix_module",
+            "detail": "MicroPython Unix - Module via start_debugpy.py",
+            "type": "shell",
+            "command": "${workspaceFolder}firmware/unix_debug_enabled/micropython",
+            "args": [
+                "{$workspacefolder}/launcher/start_debugpy.py",
+            ],
+            "isBackground": true,
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "reveal": "always"
+            },
+            // Dummy non-empty problem matcher must be defined.
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3,
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".",
+                    }
+                }
+            ],
+        },
+        {
+            "label": "mp_esp32_upload_src",
+            "detail": "MicroPython ESP32 - launcher/uploadad_src.sh",
+            "type": "shell",
+            "command": "${workspaceFolder}/launcher/upload_src.sh",
+            // "args": [
+            //     "scratch/launcher/start_debugpy.py",
+            // ],
+            "isBackground": true,
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "reveal": "always"
+            },
+            // Dummy non-empty problem matcher must be defined.
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3,
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": "Debugpy listening on",
+                    }
+                }
+            ],
+        },
+    ],
+}

@@ -1,0 +1,63 @@
+[project]
+name = "micropython-debugpy-demo"
+authors = [
+    { name = "Andrew Leech", email = "jos_verlinde@hotmail.com" },
+    { name = "Jos Verlinde", email = "jos_verlinde@hotmail.com" },
+]
+
+description = "McroPython Debugpy Demo"
+version = "1.26.0-preview"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: MicroPython",
+    "License :: OSI Approved :: MIT License",
+]
+readme = "readme.md"
+license = "MIT"
+
+[project.optional-dependencies]
+# install to folder typings
+# uv pip install -r pyproject.toml --extra stubs --target typings 
+stubs = ["micropython-esp32-stubs"]
+
+
+# ###################################################################
+# pyright options for MicroPython
+# ###################################################################
+[tool.pyright]
+# places to check
+include = ["src"]
+extraPaths = ["src/lib", "python-ecosys/debugpy"]
+# how to check
+typeCheckingMode = "standard"
+pythonPlatform = "Linux"
+reportMissingModuleSource = "none"
+reportOptionalMemberAccess = "information"
+reportOptionalCall = "information"
+# what to use 
+stubPath = "typings"
+typeshedPath = "typings"
+# things not to check
+ignore = ["**/typings"]
+exclude = [".*", "__*", "**/typings"]
+
+# ###################################################################
+# mypy options for MicroPython
+# ###################################################################
+[tool.mypy]
+# places to check
+files = "src/*.py"
+mypy_path = "src/lib,typings,python-ecosys/debugpy"
+# how to check
+platform = "linux"
+follow_imports = "silent"
+follow_imports_for_stubs = true
+# what to use
+custom_typeshed_dir = "typings" # allow mypy to use micropython-stdlib
+# things not to check
+exclude = [
+    ".*",
+    "__*",
+    "typings[\\/].*", # TOML basic string 
+]
+# ###################################################################
