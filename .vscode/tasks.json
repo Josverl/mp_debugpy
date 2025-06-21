@@ -2,11 +2,22 @@
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
+
     "options": {
         "env": {
-            // make sure that debugpy can be found
-            "MICROPYPATH": "${workspaceFolder}/python-ecosys/debugpy:MICROPYPATH:~/.micropython/lib:/usr/lib/micropython",
+            // make sure that both the src and debugpy can be found
+            "MICROPYPATH": "${workspaceFolder}/src:${workspaceFolder}/python-ecosys/debugpy:MICROPYPATH:~/.micropython/lib:/usr/lib/micropython",
+            "MP_DEBUG_VARIANT": "unix_debug_enabled",
         },
+    },
+    "windows": {
+        "options": {
+            "env": {
+                // make sure that both the src and debugpy can be found
+                "MICROPYPATH": "${workspaceFolder}/src;${workspaceFolder}/python-ecosys/debugpy;MICROPYPATH;~/.micropython/lib;/usr/lib/micropython",
+                "MP_DEBUG_VARIANT": "unix_debug_enabled",
+            },
+        }
     },
     "tasks": [
         {
@@ -22,6 +33,10 @@
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": false
+            },
+            "icon": {
+                "id": "eye", // Any valid Codicon ID
+                "color": "terminal.ansiGreen" // Optional: any valid ThemeColor ID
             },
             "dependsOn": [
                 "mp_unix_module",
@@ -51,13 +66,17 @@
             "label": "mp_unix_file",
             "detail": "MicroPython Unix - Current File",
             "type": "shell",
-            "command": "${workspaceFolder}/firmware/unix_debug_enabled/micropython",
+            "command": "${workspaceFolder}/firmware/${MP_DEBUG_VARIANT}/micropython",
             "args": [
                 "${file}"
             ],
             "isBackground": true,
             "presentation": {
                 "focus": true,
+            },
+            "icon": {
+                "id": "debug", // Any valid Codicon ID
+                "color": "terminal.ansiCyan" // Optional: any valid ThemeColor ID
             },
             // Dummy non-empty problem matcher must be defined.
             "problemMatcher": [
@@ -82,15 +101,19 @@
             "label": "mp_unix_module",
             "detail": "MicroPython Unix - Module via start_debugpy.py",
             "type": "shell",
-            "command": "${workspaceFolder}firmware/unix_debug_enabled/micropython",
+            "command": "${workspaceFolder}/firmware/${MP_DEBUG_VARIANT}/micropython",
             "args": [
-                "{$workspacefolder}/launcher/start_debugpy.py",
+                "${workspaceFolder}/launcher/start_debugpy.py",
             ],
             "isBackground": true,
             "presentation": {
                 "focus": true,
                 "panel": "dedicated",
                 "reveal": "always"
+            },
+            "icon": {
+                "id": "debug", // Any valid Codicon ID
+                "color": "terminal.ansiCyan" // Optional: any valid ThemeColor ID
             },
             // Dummy non-empty problem matcher must be defined.
             "problemMatcher": [

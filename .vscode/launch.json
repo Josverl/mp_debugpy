@@ -21,24 +21,7 @@
             "justMyCode": false,
             "preLaunchTask": "mp_unix_file",
         },
-        {
-            "name": "MP unix : DAP Monitor + ",
-            "type": "debugpy",
-            "request": "attach",
-            "connect": {
-                "host": "localhost",
-                "port": 5679
-            },
-            // "logToFile": true,
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "${workspaceFolder}"
-                }
-            ],
-            "justMyCode": false,
-            "preLaunchTask": "DAP_monitor",
-        },
+
         {
             "name": "MP unix debugpy: module",
             "type": "debugpy",
@@ -77,5 +60,23 @@
             "justMyCode": false,
             "preLaunchTask": "mp_esp32_upload_src",
         },
+        {
+            "name": "MP unix : DAP Monitor",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5679
+            },
+            // "logToFile": true,
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "${workspaceFolder}"
+                }
+            ],
+            "justMyCode": false,
+            "preLaunchTask": "DAP_monitor",
+        },        
     ]
 }
