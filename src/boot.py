@@ -1,4 +1,10 @@
 import _secrets
+import neopixel
+from machine import Pin
+
+np = neopixel.NeoPixel(Pin(15), 10)
+np.fill((0, 0, 0))
+np.write()
 
 def do_connect():
     import machine, network

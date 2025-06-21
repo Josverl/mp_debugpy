@@ -1,8 +1,6 @@
 import sys
 import time
-import building as building
-import wifi_scan
-from building import _on_fire as building_on_fire
+
 
 implementation = sys.implementation._machine
 foo = 42
@@ -78,10 +76,19 @@ def main():
 
     loco = inspect_local_variables()  
 
+    scanner()  # Scan WiFi networks
     fire_drill()
     
-    wifi_scan.run_scan()  # Scan WiFi networks   
     mathematics()
+
+def scanner():
+    try:
+        import wifi_scan
+    except ImportError:
+        print("wifi_scan module not found. Skipping WiFi scan.")
+        return
+    wifi_scan.run_scan()  # Scan WiFi networks   
+
 
 def mathematics():
     # Test data - set breakpoint here (using smaller numbers to avoid slow fibonacci)
@@ -96,24 +103,28 @@ def mathematics():
         print(sys.implementation)
 
 def fire_drill():
-    global building_on_fire
-    door = building.Door()
-    controller = building.DoorController(door)
+    from building import Building, Door, DoorController
 
-    print("Initial door status:", building.check_door_status(door))
+    # Create building and door instances
+    building_instance = Building()
+    door = Door()
+    controller = DoorController(door)
+
+    print("Initial door status:", controller.get_status())
     print("Operating door...")
-    print("Door status after operation:", building.operate_door(controller))
+    controller.toggle()
+    print("Door status after operation:", controller.get_status())
     print("Operating door again...")
-    print("Door status after operation:", building.operate_door(controller))
-    controller.toggle()  # Should close the door
-    controller.toggle()  # Should close the door
-    door.lock()
+    controller.toggle()
+    print("Door status after operation:", controller.get_status())
+    controller.close_door()  # Ensure door is closed
+    controller.lock_door()   # Lock the door
 
     # Building is on fire
-    building_on_fire = True
+    building_instance.on_fire = True
     print("Building on fire, trying to open door...")
 
-    if building_on_fire:
+    if building_instance.on_fire:
         while door.is_locked:
             door.open()
             if not door.is_open:
