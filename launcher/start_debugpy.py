@@ -21,8 +21,8 @@ def waitfor_debugger():
 
     # Start debug server
     try:
-        debugpy.listen()
-        print("Debug server attached on 127.0.0.1:5678")
+        debugpy.listen(host='0.0.0.0', port=5678)
+        print("Debug server attached on 0.0.0.0:5678")
         print("Connecting back to VS Code debugger now...")
         import target as target_main
         debugpy.breakpoint()
