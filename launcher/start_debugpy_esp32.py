@@ -27,7 +27,18 @@ def waitfor_debugger():
     print(_banner)
     print("MicroPython VS Code Debugging Test")
     print("==================================")
-
+    nargs = len(sys.argv) - 1
+    target_module = "target"
+    target_method = "main"
+    if nargs > 0:
+        target_module = sys.argv[1]
+        if nargs > 1:
+            target_method = sys.argv[2]
+            if nargs > 2:
+                raise ValueError("Too many arguments provided. Usage: start_debugpy.py [target_module] [target_method]")
+    print(f"Target module: {target_module}")
+    print(f"Target method: {target_method}")
+    print("==================================")
     # Start debug server
     try:
         ipv4 = wlan.ipconfig('addr4')[0]
@@ -35,7 +46,10 @@ def waitfor_debugger():
         debugpy.listen(host=ipv4, port=5678)
         print("Debug server attached on 127.0.0.1:5678")
         print("Connecting back to VS Code debugger now...")
-        import target as target_main
+
+        # import target as _target
+        _target = __import__(target_module, None, None, ("*"))
+
         debugpy.breakpoint()
 
         debugpy.debug_this_thread()
@@ -45,8 +59,12 @@ def waitfor_debugger():
         import time
         time.sleep(2)
 
+        _method = getattr(_target, target_method, None)
+        if _method is None:
+            raise ImportError(f"Method '{target_method}' not found in module '{target_module}'")
+
         # Call the debuggable code function so it gets traced
-        result = target_main.main()
+        result = _method()
 
         print("Target completed successfully!")
         if result is None:
