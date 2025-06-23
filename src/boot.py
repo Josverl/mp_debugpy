@@ -1,4 +1,4 @@
-import _secrets
+import src._secrets as _secrets
 import neopixel
 from machine import Pin
 
@@ -13,7 +13,7 @@ def do_connect():
     wlan.active(True)
     wlan.config(dhcp_hostname="debugee_esp32")
     if not wlan.isconnected():
-        print('connecting to network...')
+        print(f'connecting to network... {_secrets.SSID}')
         wlan.connect(_secrets.SSID, _secrets.PASSWORD)
         while not wlan.isconnected():
             machine.idle()
