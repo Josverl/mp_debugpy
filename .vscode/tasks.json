@@ -7,7 +7,8 @@
         "env": {
             // make sure that both the src and debugpy can be found
             "MICROPYPATH": "${workspaceFolder}/src:${workspaceFolder}/python-ecosys/debugpy:MICROPYPATH:~/.micropython/lib:/usr/lib/micropython",
-            "MP_DEBUG_VARIANT": "unix_debug_enabled",
+            "MP_DEBUG_VARIANT": "unix_settrace_save_names",
+            // "MP_DEBUG_VARIANT": "unix_settrace_local_xx",
         },
     },
     "windows": {
