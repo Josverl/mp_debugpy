@@ -136,12 +136,12 @@
         },
         {
             "label": "mp_esp32_upload_src",
-            "detail": "MicroPython ESP32 - launcher/uploadad_src.sh",
+            "detail": "MicroPython ESP32 - launcher/upload_src.sh/.ps1",
             "type": "shell",
             "command": "${workspaceFolder}/launcher/upload_src.sh",
-            // "args": [
-            //     "scratch/launcher/start_debugpy.py",
-            // ],
+            "windows": {
+                "command": "${workspaceFolder}/launcher/upload_src.ps1",
+            },
             "isBackground": true,
             "presentation": {
                 "focus": true,
