@@ -32,12 +32,12 @@ class Door:
         self._is_locked = False
     @property
     def is_locked(self):
-        if _on_fire:
-            print("Opening door because building is on fire." )
-            if np:
-                np.fill((0, 255, 0))
-                np.write()
-                return False
+        # if _on_fire:
+        #     print("Opening door because building is on fire." )
+        #     if np:
+        #         np.fill((0, 255, 0))
+        #         np.write()
+        #         return False
         return self._is_locked 
 
     @is_locked.setter
