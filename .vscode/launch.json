@@ -9,15 +9,15 @@
             "type": "debugpy",
             "request": "attach",
             "connect": {
-                "host": "localhost",
-                "port": 5678
+            "host": "${input:debugHost}",
+            "port": "${input:debugPort}"
             },
             "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}/src",
-                    "remoteRoot": "."
-                }
-            ],
+            {
+                "localRoot": "${workspaceFolder}/src",
+                "remoteRoot": "."
+            }
+            ]
         },
         {
             "name": "MP unix debugpy: File",
@@ -91,7 +91,21 @@
                 }
             ],
             "justMyCode": false,
-            "preLaunchTask": "DAP_monitor",
-        },        
+            // "preLaunchTask": "DAP_monitor",
+        },
+    ],
+    "inputs": [
+        {
+            "id": "debugHost",
+            "type": "promptString",
+            "description": "Debug host",
+            "default": "localhost"
+        },
+        {
+            "id": "debugPort",
+            "type": "promptString",
+            "description": "Debug port",
+            "default": "5678"
+        }
     ]
 }

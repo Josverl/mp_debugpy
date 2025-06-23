@@ -7,8 +7,10 @@
         "env": {
             // make sure that both the src and debugpy can be found
             "MICROPYPATH": "${workspaceFolder}/src:${workspaceFolder}/python-ecosys/debugpy:MICROPYPATH:~/.micropython/lib:/usr/lib/micropython",
-            "MP_DEBUG_VARIANT": "unix_settrace_save_names",
+            // 3 different levels of debug variants
+            // "MP_DEBUG_VARIANT": "unix_settrace",
             // "MP_DEBUG_VARIANT": "unix_settrace_local_xx",
+            "MP_DEBUG_VARIANT": "unix_settrace_save_names",
         },
     },
     "windows": {
@@ -39,11 +41,11 @@
                 "id": "eye", // Any valid Codicon ID
                 "color": "terminal.ansiGreen" // Optional: any valid ThemeColor ID
             },
-            "dependsOn": [
-                "mp_unix_module",
-                // "mp_unix_file",
-                // "mp_esp32_upload_src",
-            ],
+            // "dependsOn": [
+            //     // "mp_unix_module",
+            //     // "mp_unix_file",
+            //     // "mp_esp32_upload_src",
+            // ],
             // Dummy non-empty problem matcher must be defined.
             "problemMatcher": [
                 {
