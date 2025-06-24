@@ -44,7 +44,7 @@ def listen(port=DEFAULT_PORT, host=DEFAULT_HOST):
     client_sock = None
     try:
         client_sock, client_addr = listener.accept()
-        print(f"Debugger connected from {format_client_addr(client_addr)}")
+        print(f"Debugger connected from : {format_client_addr(client_addr)}")
 
         # Create debug session
         _debug_session = DebugSession(client_sock)
@@ -86,11 +86,16 @@ def format_client_addr(client_addr):
         # Extract IP address (bytes 4-8) using inet_ntoa
         ip_packed = client_addr[4:8]
         try:
-            # inet_ntoa expects 4-byte string in network byte order
-            ip_addr = socket.inet_ntoa(ip_packed)
+            # (MicroPython) inet_ntoa expects 4-byte string in network byte order
+            if hasattr(socket, 'inet_ntoa'):
+                ip_addr = socket.inet_ntoa(ip_packed)
+            elif hasattr(socket, 'inet_ntop'):
+                ip_addr = socket.inet_ntop(socket.AF_INET, ip_packed)
+            else:
+                raise AttributeError("inet_ntoa or inet_ntop not available")
             return f"{ip_addr}:{port}"
         except:
-            # Fallback if inet_ntoa not available (MicroPython)
+            # Fallback if inet_ntoa not available 
             ip_addr = '.'.join(str(b) for b in ip_packed)
             return f"{ip_addr}:{port}"
     else:
