@@ -107,6 +107,7 @@
             "command": "${workspaceFolder}/firmware/${MP_DEBUG_VARIANT}/micropython",
             "args": [
                 "${workspaceFolder}/launcher/start_debugpy.py",
+                "${fileBasenameNoExtension}",
             ],
             "isBackground": true,
             "presentation": {
@@ -165,7 +166,7 @@
                     "background": {
                         "activeOnStart": true,
                         "beginsPattern": ".",
-                        "endsPattern": "Debugpy listening on",
+                        "endsPattern": "Debugpy listening on.*",
                     }
                 }
             ],
