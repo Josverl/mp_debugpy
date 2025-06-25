@@ -17,7 +17,10 @@ def do_connect():
     wlan = network.WLAN()
     wlan.active(False)
     wlan.active(True)
-    wlan.config(dhcp_hostname="debugee_esp32")
+    try:
+        wlan.config(dhcp_hostname="debugee_esp32")
+    except Exception as e:
+        print(f"Failed to set DHCP hostname: {e}")
     if not wlan.isconnected():
         wlan.connect(_secrets.SSID, _secrets.PASSWORD)
         start = time.ticks_ms()
