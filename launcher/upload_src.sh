@@ -4,7 +4,7 @@
 mpremote mkdir lib 
 
 # NOTE: commented to reduce launch time
-# mpremote cp -r python-ecosys/debugpy/debugpy :/lib
+mpremote cp -r python-ecosys/debugpy/debugpy :/lib
 
 # copy the src directory to the root of the ESP32 filesystem
 mpremote cp -r src/* :/
