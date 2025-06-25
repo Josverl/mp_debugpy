@@ -1,11 +1,11 @@
 [project]
 name = "micropython-debugpy-demo"
 authors = [
-    { name = "Andrew Leech", email = "jos_verlinde@hotmail.com" },
+    { name = "Andrew Leech", email = "andrew.leech@planetinnovation.com.au" },
     { name = "Jos Verlinde", email = "jos_verlinde@hotmail.com" },
 ]
 
-description = "McroPython Debugpy Demo"
+description = "MicroPython Debugpy Demo"
 version = "1.26.0-preview"
 classifiers = [
     "Programming Language :: Python :: 3",
