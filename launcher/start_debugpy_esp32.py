@@ -40,7 +40,10 @@ def waitfor_debugger():
                 raise ValueError("Too many arguments provided. Usage: start_debugpy.py [target_module] [target_method]")
     print(f"Target module: {target_module}")
     print(f"Target method: {target_method}")
-    print(f"mdns         : {wlan.config('dhcp_hostname')}.local")
+    try:
+        print(f"mdns         : {wlan.config('dhcp_hostname')}.local")
+    except Exception as e:
+        print(f"ip           : {wlan.ipconfig('addr4')[0]}")
     print("==================================")
     # Start debug server
     try:

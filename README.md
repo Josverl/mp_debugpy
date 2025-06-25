@@ -105,7 +105,7 @@ The firmware includes:
 ### Platform Support
 - **Unix Port**: Full debugging support for development
 - **ESP32**: Remote debugging over WiFi
-- **VS Code Integration**: Complete DAP protocol support
+- **VS Code Integration**: Semi-Complete DAP protocol support
 
 ## API Reference
 
@@ -232,8 +232,6 @@ A successful debug session follows this sequence:
 
 ### Enhanced Variable Inspection
 
-**To be reviewed** - *Multiple conflicting configuration systems described*
-
 The implementation includes advanced local variable introspection through MicroPython's enhanced `sys.settrace()` functionality:
 
 #### Basic Frame Access
@@ -242,7 +240,6 @@ The implementation includes advanced local variable introspection through MicroP
 - Fallback to generic names (`local_01`, `local_02`) when needed
 
 #### Advanced Name Preservation
-**To be reviewed** - *Unclear which configuration flag actually controls this*
 When variable name preservation is enabled:
 - Actual variable names are preserved in bytecode
 - Variables appear with real names: `{'foo': 'hello', 'bar': 123}`
@@ -277,9 +274,6 @@ make -C ports/unix CFLAGS_EXTRA="-DMICROPY_PY_SYS_SETTRACE=1 -DMICROPY_PY_SYS_SE
 - **Memory**: Minimal overhead (~4 bytes per local variable mapping)
 
 ## Limitations
-
-**To be reviewed** - *Some limitations contradict features described elsewhere*
-
 This is a minimal implementation with these current limitations:
 
 - Single-threaded debugging only
@@ -291,7 +285,7 @@ This is a minimal implementation with these current limitations:
 
 - **Variable inspection support varies by configuration** - may show generic names or real names
 - 
-- Maximum 32 local variables per stackFrame (configurable)
+- Maximum 32 local variables per stackFrame (configurable at compile time)
 
 ## Compatibility
 
@@ -301,14 +295,15 @@ This is a minimal implementation with these current limitations:
 - VS Code with Python/debugpy extension
 - CPython 3.x (for comparison)
 
-### Backward Compatibility
+### Backward Compatibility **[ TO BE VERIFIED ]**
 - Works with or without variable name preservation
 - Progressive enhancement as more features are enabled
 - Existing code continues to work without modification
 
 ## Contributing
 
-This implementation provides a foundation for MicroPython debugging. Contributions welcome for:
+This implementation provides a foundation for MicroPython debugging. 
+Contributions welcome for:
 
 - Conditional breakpoint support
 - Enhanced variable inspection
@@ -316,6 +311,11 @@ This implementation provides a foundation for MicroPython debugging. Contributio
 - Performance optimizations
 - Additional DAP protocol features
 - More hardware platform support
+
+**Note:** 
+ - Contributions for features should go directly to the MicroPython and micropython-lib repositories (or existing PRs) 
+ - If you have samle configurations or tests or additional firmwares, they are welcome here 
+
 
 ## License
 
