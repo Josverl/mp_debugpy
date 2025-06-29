@@ -2,3 +2,7 @@
 	path = micropython-lib
 	url = https://github.com/josverl/micropython-lib.git
 	branch = debugpy/updates_02
+[submodule "micropython"]
+	path = micropython
+	url = https://github.com/josverl/micropython.git
+	branch = pdb_support_localvars
