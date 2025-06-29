@@ -1,0 +1,4 @@
+[submodule "micropython-lib"]
+	path = micropython-lib
+	url = https://github.com/josverl/micropython-lib.git
+	branch = debugpy/updates_02
