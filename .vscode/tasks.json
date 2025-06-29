@@ -6,7 +6,7 @@
     "options": {
         "env": {
             // make sure that both the src and debugpy can be found
-            "MICROPYPATH": "${workspaceFolder}/src:${workspaceFolder}/python-ecosys/debugpy:MICROPYPATH:~/.micropython/lib:/usr/lib/micropython",
+            "MICROPYPATH": "${workspaceFolder}/src:${workspaceFolder}/micropython-lib/python-ecosys/debugpy:MICROPYPATH:~/.micropython/lib:/usr/lib/micropython",
             // 3 different levels of debug variants
             // "MP_DEBUG_VARIANT": "unix_settrace",
             // "MP_DEBUG_VARIANT": "unix_settrace_local_xx",
@@ -17,7 +17,7 @@
         "options": {
             "env": {
                 // make sure that both the src and debugpy can be found
-                "MICROPYPATH": "${workspaceFolder}/src;${workspaceFolder}/python-ecosys/debugpy;MICROPYPATH;~/.micropython/lib;/usr/lib/micropython",
+                "MICROPYPATH": "${workspaceFolder}/src;${workspaceFolder}/micropython-lib/python-ecosys/debugpy;MICROPYPATH;~/.micropython/lib;/usr/lib/micropython",
                 "MP_DEBUG_VARIANT": "unix_debug_enabled",
             },
         }
@@ -27,7 +27,7 @@
             "label": "DAP_monitor",
             "detail": "Start DAP monitor to inspect the DAP messages",
             "type": "shell",
-            "command": "python python-ecosys/debugpy/dap_monitor.py --target-host localhost",
+            "command": "python micropython-lib/python-ecosys/debugpy/dap_monitor.py --target-host localhost",
             "isBackground": true,
             "presentation": {
                 "echo": false,

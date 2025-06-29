@@ -2,7 +2,7 @@
 
 # copy the debugpy module into the lib folder
 mpremote resume mkdir lib 
-# mpremote cp -r python-ecosys/debugpy/debugpy :/lib
+# mpremote cp -r micropython-lib/python-ecosys/debugpy/debugpy :/lib
 
 # copy the src directory to the root of the ESP32 filesystem
 # workaround for windows issue with mpremote cp -r

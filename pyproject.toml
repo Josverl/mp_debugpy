@@ -27,7 +27,7 @@ stubs = ["micropython-esp32-stubs"]
 [tool.pyright]
 # places to check
 include = ["src"]
-extraPaths = ["src/lib", "python-ecosys/debugpy"]
+extraPaths = ["src/lib", "micropython-lib/python-ecosys/debugpy"]
 # how to check
 typeCheckingMode = "standard"
 pythonPlatform = "Linux"
@@ -47,7 +47,7 @@ exclude = [".*", "__*", "**/typings"]
 [tool.mypy]
 # places to check
 files = "src/*.py"
-mypy_path = "src/lib,typings,python-ecosys/debugpy"
+mypy_path = "src/lib,typings,micropython-lib/python-ecosys/debugpy"
 # how to check
 platform = "linux"
 follow_imports = "silent"

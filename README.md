@@ -154,7 +154,7 @@ For detailed protocol analysis:
 firmware/unix_debug_enabled/micropython test_vscode.py
 
 # Terminal 2: Start DAP monitor
-python3 python-ecosys/debugpy/dap_monitor.py
+python3 micropython-lib/python-ecosys/debugpy/dap_monitor.py
 
 # VS Code: Connect to port 5679 instead of 5678
 ```
@@ -224,11 +224,11 @@ A successful debug session follows this sequence:
 
 ### Core Components
 
-1. **Public API** ([`public_api.py`](python-ecosys/debugpy/debugpy/public_api.py)): User-facing functions
-2. **Debug Session** ([`debug_session.py`](python-ecosys/debugpy/debugpy/server/debug_session.py)): DAP protocol handler
-3. **PDB Adapter** ([`pdb_adapter.py`](python-ecosys/debugpy/debugpy/server/pdb_adapter.py)): Trace system bridge
-4. **Messaging** ([`messaging.py`](python-ecosys/debugpy/debugpy/common/messaging.py)): JSON/DAP messages
-5. **Constants** ([`constants.py`](python-ecosys/debugpy/debugpy/common/constants.py)): Protocol definitions
+1. **Public API** ([`public_api.py`](micropython-lib/python-ecosys/debugpy/debugpy/public_api.py)): User-facing functions
+2. **Debug Session** ([`debug_session.py`](micropython-lib/python-ecosys/debugpy/debugpy/server/debug_session.py)): DAP protocol handler
+3. **PDB Adapter** ([`pdb_adapter.py`](micropython-lib/python-ecosys/debugpy/debugpy/server/pdb_adapter.py)): Trace system bridge
+4. **Messaging** ([`messaging.py`](micropython-lib/python-ecosys/debugpy/debugpy/common/messaging.py)): JSON/DAP messages
+5. **Constants** ([`constants.py`](micropython-lib/python-ecosys/debugpy/debugpy/common/constants.py)): Protocol definitions
 
 ### Enhanced Variable Inspection
 
