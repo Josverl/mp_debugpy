@@ -2,9 +2,10 @@ import sys
 import time
 
 
-implementation = sys.implementation._machine
+implementation = sys.implementation
 foo = 42
 bar = "Hello, MicroPython!"
+camelot = {"location": "England", "song": "We're knights of the round table"}
 
 def fibonacci(n):
     """Calculate fibonacci number (iterative for efficiency)."""
