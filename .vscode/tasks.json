@@ -24,10 +24,10 @@
     },
     "tasks": [
         {
-            "label": "DAP_monitor",
-            "detail": "Start DAP monitor to inspect the DAP messages",
+            "label": "monitor_ESP32",
+            "detail": "Start monitor and ESP32",
             "type": "shell",
-            "command": "python micropython-lib/python-ecosys/debugpy/dap_monitor.py --target-host localhost",
+            "command": "echo Dummy.",
             "isBackground": true,
             "presentation": {
                 "echo": false,
@@ -41,11 +41,47 @@
                 "id": "eye", // Any valid Codicon ID
                 "color": "terminal.ansiGreen" // Optional: any valid ThemeColor ID
             },
-            // "dependsOn": [
-            //     // "mp_unix_module",
-            //     // "mp_unix_file",
-            //     // "mp_esp32_upload_src",
-            // ],
+            "dependsOn": [
+                "mp_esp32_upload_src",
+                "DAP_monitor",
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3,
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".",
+                    }
+                }
+            ],
+        },
+        {
+            "label": "DAP_monitor",
+            "detail": "Start DAP monitor to inspect the DAP messages",
+            "type": "shell",
+            "command": "python micropython-lib/python-ecosys/debugpy/dap_monitor.py --target-host debugee_esp32.local",
+            "isBackground": true,
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "icon": {
+                "id": "eye", // Any valid Codicon ID
+                "color": "terminal.ansiGreen" // Optional: any valid ThemeColor ID
+            },
             // Dummy non-empty problem matcher must be defined.
             "problemMatcher": [
                 {

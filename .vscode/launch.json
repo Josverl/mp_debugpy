@@ -8,10 +8,11 @@
             "name": "MP unix debugpy: Attach",
             "type": "debugpy",
             "request": "attach",
+            // "logToFile": true,
             "connect": {
             "host": "${input:debugHost}",
             "port": "${input:debugPort}"
-            },
+        },
             "pathMappings": [
             {
                 "localRoot": "${workspaceFolder}/src",
@@ -47,11 +48,12 @@
             },
             "pathMappings": [
                 {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "${workspaceFolder}"
+                    "localRoot": "./src/",
+                    "remoteRoot": "~/mp_debugpy/src"
                 }
             ],
             "justMyCode": false,
+            "logToFile": true,
             "preLaunchTask": "mp_unix_module",
         },
         {
@@ -59,39 +61,40 @@
             "type": "debugpy",
             "request": "attach",
             // "connect": {
-            //     "host": "localhost",
-            //     "port": 5679
-            // },
-            "connect": {
-                "host": "debugee_esp32.local",
-                "port": 5678
-            },
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}/src",
-                    "remoteRoot": "/"
-                }
-            ],
+                //     "host": "localhost",
+                //     "port": 5679
+                // },
+                "connect": {
+                    "host": "debugee_esp32.local",
+                    "port": 5678
+                },
+                "pathMappings": [
+                    {
+                        "localRoot": "${workspaceFolder}/src",
+                        "remoteRoot": "/"
+                    }
+                ],
+            "logToFile": true,
             "justMyCode": false,
             "preLaunchTask": "mp_esp32_upload_src",
         },
         {
-            "name": "MP unix : DAP Monitor",
+            "name": "DAP Monitor + ...",
             "type": "debugpy",
             "request": "attach",
             "connect": {
                 "host": "localhost",
                 "port": 5679
             },
-            // "logToFile": true,
+            "logToFile": true,
             "pathMappings": [
                 {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "${workspaceFolder}"
+                    "localRoot": "${workspaceFolder}/src/",
+                    "remoteRoot": ""
                 }
             ],
             "justMyCode": false,
-            // "preLaunchTask": "DAP_monitor",
+            "preLaunchTask": "monitor_ESP32",
         },
     ],
     "inputs": [
