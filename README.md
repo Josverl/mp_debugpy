@@ -317,6 +317,10 @@ Contributions welcome for:
  - If you have samle configurations or tests or additional firmwares, they are welcome here 
 
 
+## References
+
+- https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+
 ## License
 
 MIT License - see the MicroPython project license for details.

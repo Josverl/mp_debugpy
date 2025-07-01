@@ -80,6 +80,8 @@
         },
         {
             "name": "DAP Monitor + ...",
+            "preLaunchTask": "monitor_unix",
+            // "preLaunchTask": "monitor_ESP32",
             "type": "debugpy",
             "request": "attach",
             "connect": {
@@ -89,12 +91,11 @@
             "logToFile": true,
             "pathMappings": [
                 {
-                    "localRoot": "${workspaceFolder}/src/",
-                    "remoteRoot": ""
+                    "localRoot": "./src/",
+                    "remoteRoot": "./src/"
                 }
             ],
             "justMyCode": false,
-            "preLaunchTask": "monitor_ESP32",
         },
     ],
     "inputs": [

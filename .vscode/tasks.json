@@ -10,7 +10,8 @@
             // 3 different levels of debug variants
             // "MP_DEBUG_VARIANT": "unix_settrace",
             // "MP_DEBUG_VARIANT": "unix_settrace_local_xx",
-            "MP_DEBUG_VARIANT": "unix_settrace_save_names",
+            // "MP_DEBUG_VARIANT": "unix_settrace_save_names",
+            "MP_DEBUG_VARIANT": "unix_settrace_set_local",
         },
     },
     "windows": {
@@ -23,6 +24,47 @@
         }
     },
     "tasks": [
+        {
+            "label": "monitor_unix",
+            "detail": "Start monitor attach uninx module",
+            "type": "shell",
+            "command": "echo Dummy.",
+            "isBackground": true,
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "icon": {
+                "id": "eye", // Any valid Codicon ID
+                "color": "terminal.ansiGreen" // Optional: any valid ThemeColor ID
+            },
+            "dependsOn": [
+                "mp_unix_module",
+                "DAP_monitor_localhost",
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3,
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".",
+                    }
+                }
+            ],
+        },
         {
             "label": "monitor_ESP32",
             "detail": "Start monitor and ESP32",
@@ -65,10 +107,47 @@
             ],
         },
         {
-            "label": "DAP_monitor",
+            "label": "DAP_monitor_localhost",
             "detail": "Start DAP monitor to inspect the DAP messages",
             "type": "shell",
-            "command": "python micropython-lib/python-ecosys/debugpy/dap_monitor.py --target-host debugee_esp32.local",
+            "command": "python3 micropython-lib/python-ecosys/debugpy/dap_monitor.py",
+            "isBackground": true,
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "icon": {
+                "id": "eye", // Any valid Codicon ID
+                "color": "terminal.ansiGreen" // Optional: any valid ThemeColor ID
+            },
+            // Dummy non-empty problem matcher must be defined.
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3,
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".",
+                    }
+                }
+            ],
+        },
+        {
+            "label": "DAP_monitor_debugee_esp32",
+            "detail": "Start DAP monitor to inspect the DAP messages",
+            "type": "shell",
+            "command": "python3 micropython-lib/python-ecosys/debugpy/dap_monitor.py --target-host debugee_esp32.local",
             "isBackground": true,
             "presentation": {
                 "echo": false,

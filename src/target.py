@@ -72,15 +72,17 @@ def inspect_local_variables():
 
 def main():
     """The actual code we want to debug"""
-    
     print("Running debuggable code...")
-
-    loco = inspect_local_variables()  
-
-    scanner()  # Scan WiFi networks
-    fire_drill()
+    x = 78
     
-    mathematics()
+    while True:
+
+        loco = inspect_local_variables()  
+
+        scanner()  # Scan WiFi networks
+        fire_drill()
+        
+        mathematics()
 
 def scanner():
     try:
