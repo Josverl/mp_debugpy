@@ -2,7 +2,7 @@ import pystone
 import time
 import sys
 
-def main(runs = 3, loops = 50):
+def main(runs = 3, loops = 20):
     all_stones = 0
     for i in range(runs):
         print(f"Running iteration {i + 1} of Pystone benchmark...")
