@@ -25,7 +25,8 @@ Baseline with no debugger : 65437
  micropython/debugpy:0.3 | 117.69 | .  | debugpy : Optimize memory management and performance in PDB adapter.
  micropython/debugpy:0.3 | 114.78 | .  | Merge branch 'pdb_support/perf2' into debugpy/performance
  micropython/debugpy:0.3 | 109.59  | .  | revert: Overly complex variable preview.
-  micropython/debugpy:0.3 |x | .  |
+  micropython/debugpy:0.4 |-   | .  | merge: py/modsys: Add ._set_local_var()  to set local variable in top frame for debugging support.
+  micropython/debugpy:0.4 |119.21  | .  | python-ecosys/debugpy: Add local variable modification while debugging + 
  micropython/debugpy:0.3 |x | .  |
   micropython/debugpy:0.3 |x | .  |
  
