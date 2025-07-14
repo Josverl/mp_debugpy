@@ -20,12 +20,14 @@ def inspect_local_variables():
         __platform__ = sys.platform
         dead_parrot = "Norwegian Blue"
         cheese_shop = ["Cheddar", "Stilton", "Wensleydale"]
+        cheese_market = cheese_shop.copy()*40
         holy_grail = {"quest": "find", "knights": 12}
         black_knight = {"arms": 0, "legs": 2, "status": "It's just a flesh wound!"}
         spam = ["spam"] * 5
         silly_walk = lambda x: f"Walked {x} meters, very silly!"
         _lumberjack = {"job": "lumberjack", "location": "Canada"}
         __argument_clinic = {"minutes": 5, "type": "contradiction"}
+        knights = ("Arthur", "Lancelot", ( "sir", "Galahad") , "Bedevere" )
         __foot__ = "In the clouds"
         spanish_inquisition = {"expected": False, "weapons": ["fear", "surprise", "ruthless efficiency"]}
         dead_bishop = "on the landing"
