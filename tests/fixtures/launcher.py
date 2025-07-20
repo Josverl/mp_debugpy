@@ -1,5 +1,6 @@
 import fcntl
 import os
+import random
 import socket
 import subprocess
 import time
@@ -7,8 +8,10 @@ from pathlib import Path
 
 import pytest
 
+random.seed()
 
-@pytest.fixture(scope="function")
+
+@pytest.fixture()
 def free_tcp_port(request):
     """
     Fixture to find a free TCP port on localhost starting from 5678 and increasing upward.
@@ -25,8 +28,9 @@ def free_tcp_port(request):
                 pytest.fail(f"Requested port {requested_port} is not available")
 
     # Default behavior - find free port
-    base_port = 5678
-    max_port = 6000
+    min_port = 5678
+    max_port = 8000
+    base_port = min_port + random.randint(0, max_port - min_port)
 
     for port in range(base_port, max_port):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -39,7 +43,7 @@ def free_tcp_port(request):
     pytest.fail("Could not find a free TCP port in the range 5678-5999")
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def tgt_module(request):
     """
     Fixture to provide the module name for the test.
@@ -48,7 +52,7 @@ def tgt_module(request):
     return request.param if hasattr(request, "param") else "target"
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def tgt_method(request):
     """
     Fixture to provide the method name for the test.
@@ -57,10 +61,14 @@ def tgt_method(request):
     return request.param if hasattr(request, "param") else "main"
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def micropython_debuggee(pytestconfig, tgt_module, tgt_method, free_tcp_port):
     """
     Fixture to start the debugpy executable in a separate process.
+    can be parameterized with:
+    - tgt_module: The target module to run.
+    - tgt_method: The target method to run.
+    - free_tcp_port: The port to bind the server to.
     """
     # Get the workspace root path using pytest configuration
     root_path = Path(pytestconfig.rootpath)
@@ -76,7 +84,7 @@ def micropython_debuggee(pytestconfig, tgt_module, tgt_method, free_tcp_port):
     env["MICROPYPATH"] = f"{src_path}:{micropython_lib_path}:~/.micropython/lib:/usr/lib/micropython"
 
     # Command to start the MicroPython process
-    command = [str(micropython_path), str(launcher_path), tgt_module, "main", str(free_tcp_port)]
+    command = [str(micropython_path), str(launcher_path), tgt_module, tgt_method, str(free_tcp_port)]
 
     # Start the process
     process = subprocess.Popen(command, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
