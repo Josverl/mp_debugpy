@@ -7,7 +7,6 @@ sys.path.insert(0, '.')
 sys.path.insert(1, 'micropython-lib/python-ecosys/debugpy')
 import debugpy
 
-
 _banner = r"""
  _____  _______ ______ _______ _______ ______ ___ ___ 
 |     \|    ___|   __ \   |   |     __|   __ \   |   |
@@ -26,14 +25,19 @@ def waitfor_debugger():
         if nargs > 1:
             target_method = sys.argv[2]
             if nargs > 2:
-                raise ValueError("Too many arguments provided. Usage: start_debugpy.py [target_module] [target_method]")
+                port = sys.argv[3]
+                if nargs > 3:
+                    raise ValueError(
+                        "Too many arguments provided. Usage: start_debugpy.py [target_module] [target_method]"
+                    )
     print(f"Target module: {target_module}")
     print(f"Target method: {target_method}")
+    print(f"Listening port: {port}")
     print("==================================")
     # Start debug server
     try:
-        debugpy.listen(host='0.0.0.0', port=5678)
-        print("Debug server attached on 0.0.0.0:5678")
+        debugpy.listen(host="0.0.0.0", port=port)
+        print(f"Debug server attached on 0.0.0.0:{port}")
         print("Connecting back to VS Code debugger now...")
 
         _target = __import__(target_module, None, None, ("*"))
