@@ -41,6 +41,9 @@ def waitfor_debugger():
         print("Connecting back to VS Code debugger now...")
 
         _target = __import__(target_module, None, None, ("*"))
+        _method = getattr(_target, target_method, None)
+        if _method is None:
+            raise ImportError(f"Method '{target_method}' not found in module '{target_module}'")
 
         # import target as target_main
         debugpy.breakpoint()
