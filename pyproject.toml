@@ -163,3 +163,8 @@ max-statements = 166
 "micropython/bluetooth/aioble/multitests/*" = ["F821"]
 
 [tool.ruff.format]
+
+
+# pytest configuration
+[tool.pytest.ini_options]
+testpaths = ["tests"]
