@@ -28,5 +28,9 @@
     "python.analysis.extraPaths": [
         "{$workspaceFolder}/micropython-lib/python-ecosys/debugpy"
     ],
+    "search.exclude": {
+        "**/.venv": true,
+        "**/micropython/lib/micropython-lib": true
+    },
 
 }

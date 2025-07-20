@@ -4,20 +4,57 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+            {
+            "name": "Debug pytest tests",
+            "purpose": [
+                "debug-test"
+            ],
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "stopOnEntry": false,
+            // false : Avoid debugpy trying to debug micropython
+            // but may cause issue with pytest-cov coverage reporting 
+            "subProcess": false,
+        },
+        {
+            "name": "Python Debugger: Remote Attach",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5679
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ]
+        },
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
         {
             "name": "MP unix debugpy: Attach",
             "type": "debugpy",
             "request": "attach",
             // "logToFile": true,
             "connect": {
-            "host": "${input:debugHost}",
-            "port": "${input:debugPort}"
-        },
+                "host": "${input:debugHost}",
+                "port": "${input:debugPort}"
+            },
             "pathMappings": [
-            {
-                "localRoot": "${workspaceFolder}/src",
-                "remoteRoot": "."
-            }
+                {
+                    "localRoot": "${workspaceFolder}/src",
+                    "remoteRoot": "."
+                }
             ]
         },
         {
@@ -37,7 +74,6 @@
             "justMyCode": false,
             "preLaunchTask": "mp_unix_file",
         },
-
         {
             "name": "MP unix debugpy: module",
             "type": "debugpy",
@@ -49,11 +85,11 @@
             "pathMappings": [
                 {
                     "localRoot": "./src/",
-                    "remoteRoot": "~/mp_debugpy/src"
+                    "remoteRoot": "./src/"
                 }
             ],
             "justMyCode": false,
-            "logToFile": true,
+            // "logToFile": true,
             "preLaunchTask": "mp_unix_module",
         },
         {
@@ -61,19 +97,19 @@
             "type": "debugpy",
             "request": "attach",
             // "connect": {
-                //     "host": "localhost",
-                //     "port": 5679
-                // },
-                "connect": {
-                    "host": "debugee_esp32.local",
-                    "port": 5678
-                },
-                "pathMappings": [
-                    {
-                        "localRoot": "${workspaceFolder}/src",
-                        "remoteRoot": "/"
-                    }
-                ],
+            //     "host": "localhost",
+            //     "port": 5679
+            // },
+            "connect": {
+                "host": "debugee_esp32.local",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/src",
+                    "remoteRoot": "/"
+                }
+            ],
             "logToFile": true,
             "justMyCode": false,
             "preLaunchTask": "mp_esp32_upload_src",

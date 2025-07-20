@@ -251,6 +251,7 @@ To enable debugging features, ensure the following flags are set:
 
 ```sh
 make -C ports/unix CFLAGS_EXTRA="-DMICROPY_PY_SYS_SETTRACE=1 -DMICROPY_PY_SYS_SETTRACE_SAVE_NAMES=1"
+make -C ports/unix CFLAGS_EXTRA="-DMICROPY_PY_SYS_SETTRACE=1 -DMICROPY_PY_SYS_SETTRACE_SAVE_NAMES=1"
 ```
 
 ```c
