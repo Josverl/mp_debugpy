@@ -53,7 +53,8 @@ def waitfor_debugger():
         # Give VS Code a moment to set breakpoints after attach
         print("\nGiving VS Code time to set breakpoints...")
         import time
-        time.sleep(2)
+
+        time.sleep(0.2)
 
         _method = getattr(_target, target_method, None)
         if _method is None:

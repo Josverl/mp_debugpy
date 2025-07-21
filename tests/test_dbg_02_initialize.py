@@ -86,3 +86,6 @@ def test_debug_initialize_non_existent(fake_vscode_server, tgt_module, tgt_metho
 
     # should have only 2 messages
     assert len(server.rcv_messages) == 2, f"Expected 2 messages, got {len(server.rcv_messages)}"
+
+
+
