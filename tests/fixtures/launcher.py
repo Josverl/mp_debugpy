@@ -60,9 +60,18 @@ def tgt_method(request):
     """
     return request.param if hasattr(request, "param") else "main"
 
+@pytest.fixture()
+def in_terminal(request):
+    """
+    Fixture to provide the method name for the test.
+    Can be parameterized to use different methods.
+    """
+    default = False
+    default = True
+    return request.param if hasattr(request, "param") else default
 
 @pytest.fixture()
-def micropython_debuggee(pytestconfig, tgt_module, tgt_method, free_tcp_port):
+def micropython_debuggee(pytestconfig, tgt_module: str, tgt_method: str, free_tcp_port: int, in_terminal: bool):
     """
     Fixture to start the debugpy executable in a separate process.
     can be parameterized with:
@@ -86,82 +95,107 @@ def micropython_debuggee(pytestconfig, tgt_module, tgt_method, free_tcp_port):
     # Command to start the MicroPython process
     command = [str(micropython_path), str(launcher_path), tgt_module, tgt_method, str(free_tcp_port)]
 
-    # Start the process
-    process = subprocess.Popen(command, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if in_terminal:
+        # Make the subprocess visible in a new terminal window
+        terminal_command = [
+            "x-terminal-emulator",
+            "-e",
+            " ".join(command),
+        ]
 
-    # Set stdout and stderr to non-blocking mode
-    if process.stdout:
-        fcntl.fcntl(
-            process.stdout.fileno(),
-            fcntl.F_SETFL,
-            fcntl.fcntl(process.stdout.fileno(), fcntl.F_GETFL) | os.O_NONBLOCK,
+        # Start the process in a new terminal
+        process = subprocess.Popen(
+            terminal_command,
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
         )
-    if process.stderr:
-        fcntl.fcntl(
-            process.stderr.fileno(),
-            fcntl.F_SETFL,
-            fcntl.fcntl(process.stderr.fileno(), fcntl.F_GETFL) | os.O_NONBLOCK,
+
+        # time.sleep(1)  # Give the terminal some time to open
+
+    else:
+        process = subprocess.Popen(
+            command,
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
         )
 
-    # ======================================
-    stdout_data = ""
-    stderr_data = ""
-    max_retries = 10
+        # Set stdout and stderr to non-blocking mode
+        if process.stdout:
+            fcntl.fcntl(
+                process.stdout.fileno(),
+                fcntl.F_SETFL,
+                fcntl.fcntl(process.stdout.fileno(), fcntl.F_GETFL) | os.O_NONBLOCK,
+            )
+        if process.stderr:
+            fcntl.fcntl(
+                process.stderr.fileno(),
+                fcntl.F_SETFL,
+                fcntl.fcntl(process.stderr.fileno(), fcntl.F_GETFL) | os.O_NONBLOCK,
+            )
 
-    # Verify all expected output lines are present
-    expected_lines = [
-        "MicroPython VS Code Debugging Test",
-        "==================================",
-        f"Target module: {tgt_module}",
-        f"Target method: {tgt_method}",
-        "==================================",
-        f"Debugpy listening on 0.0.0.0:{free_tcp_port}",
-    ]
+        # ======================================
+        stdout_data = ""
+        stderr_data = ""
+        max_retries = 10
 
-    for attempt in range(max_retries):
-        print(f"Attempt {attempt + 1}/{max_retries} to read process output...")
+        # Verify all expected output lines are present
+        expected_lines = [
+            "MicroPython VS Code Debugging Test",
+            "==================================",
+            f"Target module: {tgt_module}",
+            f"Target method: {tgt_method}",
+            "==================================",
+            f"Debugpy listening on 0.0.0.0:{free_tcp_port}",
+        ]
 
-        # Non-blocking read from stdout
-        try:
-            if process.stdout:
-                chunk = process.stdout.read(1024)
-                if chunk:
-                    stdout_data += chunk
-        except (BlockingIOError, OSError):
-            pass  # No data available
-        except Exception as e:
-            print(f"Error reading stdout: {e}")
+        for attempt in range(max_retries):
+            print(f"Attempt {attempt + 1}/{max_retries} to read process output...")
 
-        # Non-blocking read from stderr
-        try:
-            if process.stderr:
-                chunk = process.stderr.read(1024)
-                if chunk:
-                    stderr_data += chunk
-        except (BlockingIOError, OSError):
-            pass  # No data available
-        except Exception as e:
-            print(f"Error reading stderr: {e}")
+            # Non-blocking read from stdout
+            try:
+                if process.stdout:
+                    chunk = process.stdout.read(1024)
+                    if chunk:
+                        stdout_data += chunk
+            except (BlockingIOError, OSError):
+                pass  # No data available
+            except Exception as e:
+                print(f"Error reading stdout: {e}")
 
-        # Check if process has terminated
-        if process.poll() is not None:
-            print(f"Process terminated with exit code: {process.returncode}")
-            break
+            # Non-blocking read from stderr
+            try:
+                if process.stderr:
+                    chunk = process.stderr.read(1024)
+                    if chunk:
+                        stderr_data += chunk
+            except (BlockingIOError, OSError):
+                pass  # No data available
+            except Exception as e:
+                print(f"Error reading stderr: {e}")
 
-        # Check if we have all expected lines
-        if all(line.strip() in stdout_data for line in expected_lines):
-            break
+            # Check if process has terminated
+            if process.poll() is not None:
+                print(f"Process terminated with exit code: {process.returncode}")
+                break
 
-        time.sleep(0.1)
+            # Check if we have all expected lines
+            if all(line.strip() in stdout_data for line in expected_lines):
+                break
 
-    # Check for errors in stderr
-    if stderr_data.strip():
-        pytest.fail(f"Process stderr contains errors: {stderr_data}")
+            time.sleep(0.1)
 
-    print("stdout_data:", stdout_data)
+        # Check for errors in stderr
+        if stderr_data.strip():
+            pytest.fail(f"Process stderr contains errors: {stderr_data}")
 
-    for line in expected_lines:
-        assert line in stdout_data, f"Expected line '{line}' not found in stdout. Got: {stdout_data}"
+        print("stdout_data:", stdout_data)
+
+        for line in expected_lines:
+            assert line in stdout_data, f"Expected line '{line}' not found in stdout. Got: {stdout_data}"
 
     # ======================================
 
