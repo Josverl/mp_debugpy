@@ -165,7 +165,7 @@ def micropython_debuggee(pytestconfig, tgt_module, tgt_method, free_tcp_port):
 
     # ======================================
 
-    yield process, free_tcp_port
+    yield process
 
     # Terminate the process after the test if it's still running
     if process.poll() is None:
