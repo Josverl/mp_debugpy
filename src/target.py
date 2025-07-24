@@ -77,17 +77,14 @@ def main():
     """The actual code we want to debug"""
     print("Running debuggable code...")
     x = 78
-
     for _ in range(3):
-
-        loco = inspect_local_variables()  
-
+        loco = inspect_local_variables()
         scanner()  # Scan WiFi networks
         # fire_drill()
         mathematics()
-
         print("Done...")
-        print("Final")
+    print("Final")
+
 
 def scanner():
     try:
@@ -95,7 +92,7 @@ def scanner():
     except ImportError:
         print("wifi_scan module not found. Skipping WiFi scan.")
         return
-    wifi_scan.run_scan()  # Scan WiFi networks   
+    wifi_scan.run_scan()  # Scan WiFi networks
 
 
 def mathematics():
@@ -103,12 +100,12 @@ def mathematics():
     global foo
     numbers = [3, 4, 5]
     for i, num in enumerate(numbers):
-        
         print(f"Calculating fibonacci({num})...")
         result = fibonacci(num)  # <-- SET BREAKPOINT HERE (line 26)
         foo += result  # Modify foo to see if it gets traced
         print(f"fibonacci({num}) = {result}")
         print(sys.implementation)
+
 
 def fire_drill():
     from building import Building, Door, DoorController
@@ -126,7 +123,7 @@ def fire_drill():
     controller.toggle()
     print("Door status after operation:", controller.get_status())
     controller.close_door()  # Ensure door is closed
-    controller.lock_door()   # Lock the door
+    controller.lock_door()  # Lock the door
 
     # Building is on fire
     building_instance.on_fire = True
@@ -141,7 +138,6 @@ def fire_drill():
             else:
                 print("Door is now open, exiting the building.")
                 break
-
 
 
 if __name__ == "__main__":
