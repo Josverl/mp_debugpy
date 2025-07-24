@@ -1,6 +1,8 @@
+import re
 import time
 
 import pytest
+from helpers import wait_for_msg
 
 
 def test_debug_initialize(fake_vscode_server, tgt_module):
@@ -106,15 +108,18 @@ def test_debug_req_threads(fake_vscode_server, tgt_module):
     client = server.client
     threads_response = []
     client.send_request("threads", {})
+
+    wait_for_msg(server, response="threads")
+    threads_response = [msg for msg in server.rcv_messages if msg.type == "response" and msg.command == "threads"]
+
     # process the response
-    for _ in range(500):
-        time.sleep(0.01)
-        server.run_single()
-        if threads_response := [
-            msg for msg in server.rcv_messages if msg.type == "response" and msg.command == "threads"
-        ]:
-            print(f"Received  response after {_ * 0.01} seconds")
-            break
+    # for _ in range(500):
+    #     time.sleep(0.01)
+    #     server.run_single()
+    #     threads_response = [msg for msg in server.rcv_messages if msg.type == "response" and msg.command == "threads"]
+    #     if threads_response:
+    #         print(f"Received  response after {_ * 0.01} seconds")
+    #         break
 
     # check threads response
 

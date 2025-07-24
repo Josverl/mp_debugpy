@@ -60,18 +60,26 @@ def tgt_method(request):
     """
     return request.param if hasattr(request, "param") else "main"
 
+
 @pytest.fixture()
 def in_terminal(request):
     """
     Fixture to provide the method name for the test.
     Can be parameterized to use different methods.
     """
-    default = False
     default = True
+    default = False
     return request.param if hasattr(request, "param") else default
 
+
 @pytest.fixture()
-def micropython_debuggee(pytestconfig, tgt_module: str, tgt_method: str, free_tcp_port: int, in_terminal: bool):
+def micropython_debuggee(
+    pytestconfig,
+    tgt_module: str,
+    tgt_method: str,
+    free_tcp_port: int,
+    in_terminal: bool,
+):
     """
     Fixture to start the debugpy executable in a separate process.
     can be parameterized with:
@@ -202,10 +210,17 @@ def micropython_debuggee(pytestconfig, tgt_module: str, tgt_method: str, free_tc
     yield process
 
     # Terminate the process after the test if it's still running
-    if process.poll() is None:
-        process.terminate()
-        try:
-            process.wait(timeout=1)
-        except subprocess.TimeoutExpired:
+    try:
+        if process.poll() is None:
+            process.terminate()
+            try:
+                process.wait(timeout=1)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait(timeout=1)
+    finally:
+        # Ensure terminal process is terminated if started
+        if in_terminal and process.poll() is None:
             process.kill()
             process.wait(timeout=1)
+            process.terminate()
