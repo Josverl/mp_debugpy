@@ -1,17 +1,18 @@
 """Start the MicroPython debug server for VS Code debugging."""
-
 import sys
+import time
+
+import debugpy
 
 # Set sys.path to include the scratch/launcher directory.
 sys.path.insert(0, '.')
-sys.path.insert(1, 'micropython-lib/python-ecosys/debugpy')
-import debugpy
+sys.path.insert(1, "micropython-lib/python-ecosys/debugpy")
 
 _banner = r"""
- _____  _______ ______ _______ _______ ______ ___ ___ 
+ _____  _______ ______ _______ _______ ______ ___ ___
 |     \|    ___|   __ \   |   |     __|   __ \   |   |
-|  --  |    ___|   __ <   |   |    |  |    __/\     / 
-|_____/|_______|______/_______|_______|___|    |___|  
+|  --  |    ___|   __ <   |   |    |  |    __/\     /
+|_____/|_______|______/_______|_______|___|    |___|
 """
 def waitfor_debugger():
     print(_banner)
@@ -20,6 +21,7 @@ def waitfor_debugger():
     nargs = len(sys.argv) - 1
     target_module = "target"
     target_method = "main"
+    port = 5678  # Default port for debugpy
     if nargs > 0:
         target_module = sys.argv[1]
         if nargs > 1:
@@ -36,7 +38,7 @@ def waitfor_debugger():
     print("==================================")
     # Start debug server
     try:
-        debugpy.listen(host="0.0.0.0", port=port)
+        debugpy.listen(host="0.0.0.0", port=int(port))
         print(f"Debug server attached on 0.0.0.0:{port}")
         print("Connecting back to VS Code debugger now...")
 
@@ -46,15 +48,13 @@ def waitfor_debugger():
             raise ImportError(f"Method '{target_method}' not found in module '{target_module}'")
 
         # import target as target_main
+        print("waiting at debugpy.breakpoint()")
         debugpy.breakpoint()
-
         debugpy.debug_this_thread()
 
         # Give VS Code a moment to set breakpoints after attach
         print("\nGiving VS Code time to set breakpoints...")
-        import time
-
-        time.sleep(0.2)
+        time.sleep(2)
 
         _method = getattr(_target, target_method, None)
         if _method is None:
