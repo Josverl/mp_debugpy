@@ -14,26 +14,6 @@ from anyio import Path
 from helpers import PerfServer
 
 
-# simple fixtures to provide defaults
-@pytest.fixture
-def local_root(request):
-    # attach
-    if hasattr(request, "param"):
-        yield request.param
-    else:
-        # Default value if not parameterized
-        yield "./src"
-
-
-@pytest.fixture
-def remote_root(request):
-    # attach
-    if hasattr(request, "param"):
-        yield request.param
-    else:
-        # Default value if not parameterized
-        yield "./src"
-
 
 @pytest.fixture
 def logToFile(request):

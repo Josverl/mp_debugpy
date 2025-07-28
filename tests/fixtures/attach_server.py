@@ -12,13 +12,34 @@ import pytest
 from helpers import PerfServer
 
 
+# simple fixtures to provide defaults
+@pytest.fixture
+def local_root(request):
+    # attach
+    if hasattr(request, "param"):
+        yield request.param
+    else:
+        # Default value if not parameterized
+        yield "./src"
+
+
+@pytest.fixture
+def remote_root(request):
+    # attach
+    if hasattr(request, "param"):
+        yield request.param
+    else:
+        # Default value if not parameterized
+        yield "./src"
+
+
 @pytest.fixture
 def attach_server(
-    fake_vscode_server,
+    fake_vscode_server: PerfServer,
     free_tcp_port: int,
     logToFile: bool,
-    local_root: str = "/home/jos/mp_debugpy/src",
-    remote_root: str = "/home/jos/mp_debugpy/src",
+    local_root: str,
+    remote_root: str,
 ):
     """
     Setup the fake_vscode_server for testing
@@ -60,20 +81,16 @@ def attach_server(
             "workspaceFolder": "/home/jos/mp_debugpy",
             "justMyCode": True,
             "logToFile": logToFile,
-            "__configurationTarget": 6,
+            # "__configurationTarget": 6,
             "clientOS": "unix",
-            "debugOptions": ["RedirectOutput", "ShowReturnValue"],
+            "debugOptions": [
+                "RedirectOutput",
+                "ShowReturnValue",
+            ],
             "showReturnValue": True,
             "__sessionId": "11976c7b-f770-484d-a445-115e82e3abcb",
         },
     )
-    # server.run_single()
-    # time.sleep(attach_delay / 2)
-    # server.run_single()
-    # time.sleep(attach_delay / 2)
-    # for _ in range(5):
-    #     time.sleep(0.1)
-    #     server.run_single()
-
+    # do not add a wait or processing at this point
     yield server
 
