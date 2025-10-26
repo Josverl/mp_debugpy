@@ -1,7 +1,7 @@
 import pytest
 
 pytest_plugins = [
-    "fixtures.launcher",
+    "fixtures.debuggee",
     "fixtures.fake_vscode",
-    # "fixtures.attach",
+    "fixtures.attach_server",
 ]

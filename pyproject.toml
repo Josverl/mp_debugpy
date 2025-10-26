@@ -118,6 +118,9 @@ select = [
   # "UP",   # pyupgrade
 ]
 ignore = [
+  "T100", # this repro uses debugpy, warnings are just in the way
+  "PGH003", # stop nagging 
+  #
   "E722",
   "E741",  # 'l' is currently widely used
   "F401",

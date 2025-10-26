@@ -1,6 +1,8 @@
+import re
 import time
 
 import pytest
+from helpers import wait_for_msg
 
 
 def test_debug_initialize(fake_vscode_server, tgt_module):
@@ -89,3 +91,41 @@ def test_debug_initialize_non_existent(fake_vscode_server, tgt_module, tgt_metho
 
 
 
+def test_debug_req_threads(fake_vscode_server, tgt_module):
+    """
+    Test the threads request functionality.
+    """
+    server = fake_vscode_server
+    assert server is not None, "Server should not be None"
+
+    print("start()")
+    server.start()
+    # process the initial DAP messages
+    for _ in range(5):
+        time.sleep(0.01)
+        server.run_single()
+
+    client = server.client
+    threads_response = []
+    client.send_request("threads", {})
+
+    wait_for_msg(server, response="threads")
+    threads_response = [msg for msg in server.rcv_messages if msg.type == "response" and msg.command == "threads"]
+
+    # process the response
+    # for _ in range(500):
+    #     time.sleep(0.01)
+    #     server.run_single()
+    #     threads_response = [msg for msg in server.rcv_messages if msg.type == "response" and msg.command == "threads"]
+    #     if threads_response:
+    #         print(f"Received  response after {_ * 0.01} seconds")
+    #         break
+
+    # check threads response
+
+    assert len(threads_response) == 1, f"Expected 1 threads response, got {len(threads_response)}"
+
+    body = threads_response[0].body
+    assert "threads" in body, "Threads should be present in the response"
+    assert isinstance(body["threads"], list), "Threads should be a list"
+    assert len(body["threads"]) > 0, "Threads list should not be empty"
