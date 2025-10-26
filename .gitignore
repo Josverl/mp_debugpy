@@ -2,3 +2,5 @@
 typings
 **/_secrets.*
 **/__pycache__
+debugpy_logs
+*.log

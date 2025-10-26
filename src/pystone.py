@@ -39,9 +39,11 @@ Version History:
 
 """
 
-LOOPS = 50000
+
 
 from utime import clock
+
+LOOPS = 50000
 
 __version__ = "1.2"
 
@@ -64,11 +66,6 @@ class Record:
 TRUE = 1
 FALSE = 0
 
-def main(loops=LOOPS):
-    benchtime, stones = pystones(loops)
-    print("Pystone(%s) time for %d passes = %g" % \
-          (__version__, loops, benchtime))
-    print("This machine benchmarks at %g pystones/second" % stones)
 
 
 def pystones(loops=LOOPS):
@@ -259,7 +256,16 @@ def Func3(EnumParIn):
     if EnumLoc == Ident3: return TRUE
     return FALSE
 
-if __name__ == '__main__':
+
+def main(loops=LOOPS):
+    benchtime, stones = pystones(loops)
+    print("Pystone(%s) time for %d passes = %g" % \
+          (__version__, loops, benchtime))
+    print("This machine benchmarks at %g pystones/second" % stones)
+    return stones
+
+
+def cli(loops=LOOPS):
     import sys
     def error(msg):
         print(msg, end=' ', file=sys.stderr)
@@ -275,3 +281,6 @@ if __name__ == '__main__':
     else:
         loops = LOOPS
     main(loops)
+
+if __name__ == '__main__':
+    cli()

@@ -6,28 +6,70 @@
     "options": {
         "env": {
             // make sure that both the src and debugpy can be found
-            "MICROPYPATH": "${workspaceFolder}/src:${workspaceFolder}/python-ecosys/debugpy:MICROPYPATH:~/.micropython/lib:/usr/lib/micropython",
+            "MICROPYPATH": "${workspaceFolder}/src:${workspaceFolder}/micropython-lib/python-ecosys/debugpy:MICROPYPATH:~/.micropython/lib:/usr/lib/micropython",
             // 3 different levels of debug variants
             // "MP_DEBUG_VARIANT": "unix_settrace",
             // "MP_DEBUG_VARIANT": "unix_settrace_local_xx",
-            "MP_DEBUG_VARIANT": "unix_settrace_save_names",
+            // "MP_DEBUG_VARIANT": "unix_settrace_save_names",
+            "MP_DEBUG_VARIANT": "unix_settrace_set_local",
         },
     },
     "windows": {
         "options": {
             "env": {
                 // make sure that both the src and debugpy can be found
-                "MICROPYPATH": "${workspaceFolder}/src;${workspaceFolder}/python-ecosys/debugpy;MICROPYPATH;~/.micropython/lib;/usr/lib/micropython",
+                "MICROPYPATH": "${workspaceFolder}/src;${workspaceFolder}/micropython-lib/python-ecosys/debugpy;MICROPYPATH;~/.micropython/lib;/usr/lib/micropython",
                 "MP_DEBUG_VARIANT": "unix_debug_enabled",
             },
         }
     },
     "tasks": [
         {
-            "label": "DAP_monitor",
-            "detail": "Start DAP monitor to inspect the DAP messages",
+            "label": "monitor_unix",
+            "detail": "Start monitor attach uninx module",
             "type": "shell",
-            "command": "python python-ecosys/debugpy/dap_monitor.py --target-host localhost",
+            "command": "echo Dummy.",
+            "isBackground": true,
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "dependsOn": [
+                "mp_unix_module",
+                "DAP_monitor_localhost"
+            ],
+            "icon": {
+                "id": "eye",
+                "color": "terminal.ansiGreen"
+            },
+            "dependsOrder": "sequence",
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": "."
+                    }
+                }
+            ]
+        },
+        {
+            "label": "monitor_ESP32",
+            "detail": "Start monitor and ESP32",
+            "type": "shell",
+            "command": "echo Dummy.",
             "isBackground": true,
             "presentation": {
                 "echo": false,
@@ -38,15 +80,14 @@
                 "clear": false
             },
             "icon": {
-                "id": "eye", // Any valid Codicon ID
-                "color": "terminal.ansiGreen" // Optional: any valid ThemeColor ID
+                "id": "eye",
+                "color": "terminal.ansiGreen"
             },
-            // "dependsOn": [
-            //     // "mp_unix_module",
-            //     // "mp_unix_file",
-            //     // "mp_esp32_upload_src",
-            // ],
-            // Dummy non-empty problem matcher must be defined.
+            "dependsOn": [
+                "mp_esp32_upload_src",
+                "DAP_monitor"
+            ],
+            "dependsOrder": "sequence",
             "problemMatcher": [
                 {
                     "pattern": [
@@ -54,16 +95,88 @@
                             "regexp": ".",
                             "file": 1,
                             "location": 2,
-                            "message": 3,
+                            "message": 3
                         }
                     ],
                     "background": {
                         "activeOnStart": true,
                         "beginsPattern": ".",
-                        "endsPattern": ".",
+                        "endsPattern": "."
                     }
                 }
-            ],
+            ]
+        },
+        {
+            "label": "DAP_monitor_localhost",
+            "detail": "Start DAP monitor to inspect the DAP messages",
+            "type": "shell",
+            "command": "python3 micropython-lib/python-ecosys/debugpy/dap_monitor.py",
+            "isBackground": true,
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "icon": {
+                "id": "eye",
+                "color": "terminal.ansiGreen"
+            },
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": "."
+                    }
+                }
+            ]
+        },
+        {
+            "label": "DAP_monitor_debugee_esp32",
+            "detail": "Start DAP monitor to inspect the DAP messages",
+            "type": "shell",
+            "command": "python3 micropython-lib/python-ecosys/debugpy/dap_monitor.py --target-host 192.168.1.28",
+            "isBackground": true,
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "icon": {
+                "id": "eye",
+                "color": "terminal.ansiGreen"
+            },
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": "."
+                    }
+                }
+            ]
         },
         {
             "label": "mp_unix_file",
@@ -75,13 +188,12 @@
             ],
             "isBackground": true,
             "presentation": {
-                "focus": true,
+                "focus": true
             },
             "icon": {
-                "id": "debug", // Any valid Codicon ID
-                "color": "terminal.ansiCyan" // Optional: any valid ThemeColor ID
+                "id": "debug",
+                "color": "terminal.ansiCyan"
             },
-            // Dummy non-empty problem matcher must be defined.
             "problemMatcher": [
                 {
                     "pattern": [
@@ -89,16 +201,16 @@
                             "regexp": ".",
                             "file": 1,
                             "location": 2,
-                            "message": 3,
+                            "message": 3
                         }
                     ],
                     "background": {
                         "activeOnStart": true,
                         "beginsPattern": ".",
-                        "endsPattern": ".",
+                        "endsPattern": "."
                     }
                 }
-            ],
+            ]
         },
         {
             "label": "mp_unix_module",
@@ -107,7 +219,7 @@
             "command": "${workspaceFolder}/firmware/${MP_DEBUG_VARIANT}/micropython",
             "args": [
                 "${workspaceFolder}/launcher/start_debugpy.py",
-                "${fileBasenameNoExtension}",
+                "${fileBasenameNoExtension}"
             ],
             "isBackground": true,
             "presentation": {
@@ -116,10 +228,9 @@
                 "reveal": "always"
             },
             "icon": {
-                "id": "debug", // Any valid Codicon ID
-                "color": "terminal.ansiCyan" // Optional: any valid ThemeColor ID
+                "id": "debug",
+                "color": "terminal.ansiCyan"
             },
-            // Dummy non-empty problem matcher must be defined.
             "problemMatcher": [
                 {
                     "pattern": [
@@ -127,16 +238,16 @@
                             "regexp": ".",
                             "file": 1,
                             "location": 2,
-                            "message": 3,
+                            "message": 3
                         }
                     ],
                     "background": {
                         "activeOnStart": true,
                         "beginsPattern": ".",
-                        "endsPattern": ".",
+                        "endsPattern": "."
                     }
                 }
-            ],
+            ]
         },
         {
             "label": "mp_esp32_upload_src",
@@ -144,7 +255,7 @@
             "type": "shell",
             "command": "${workspaceFolder}/launcher/upload_src.sh",
             "windows": {
-                "command": "${workspaceFolder}/launcher/upload_src.ps1",
+                "command": "${workspaceFolder}/launcher/upload_src.ps1"
             },
             "isBackground": true,
             "presentation": {
@@ -152,7 +263,6 @@
                 "panel": "dedicated",
                 "reveal": "always"
             },
-            // Dummy non-empty problem matcher must be defined.
             "problemMatcher": [
                 {
                     "pattern": [
@@ -160,16 +270,16 @@
                             "regexp": ".",
                             "file": 1,
                             "location": 2,
-                            "message": 3,
+                            "message": 3
                         }
                     ],
                     "background": {
                         "activeOnStart": true,
                         "beginsPattern": ".",
-                        "endsPattern": "Debugpy listening on.*",
+                        "endsPattern": "Debugpy listening on.*"
                     }
                 }
-            ],
-        },
+            ]
+        }
     ],
 }
