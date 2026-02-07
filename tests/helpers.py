@@ -46,6 +46,15 @@ def wait_for_msg(server, *, count=0, event="", response="", timeout=5):
             server.run_single()
     return len(server.rcv_messages) >= count
 
+def find_messages(server, *, event="", response=""):
+    """Find all messages matching the given event or response."""
+    if event:
+        return [msg for msg in server.rcv_messages if msg.type == "event" and msg.event == event]
+    elif response:
+        return [msg for msg in server.rcv_messages if msg.type == "response" and msg.command == response]
+    return []
+
+
 
 def set_breakpoints(
     server: PerfServer,

@@ -93,4 +93,3 @@ def attach_server(
     )
     # do not add a wait or processing at this point
     yield server
-

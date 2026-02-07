@@ -1,4 +1,5 @@
 """Start the MicroPython debug server for VS Code debugging."""
+import argparse
 import sys
 import time
 
@@ -14,27 +15,35 @@ _banner = r"""
 |  --  |    ___|   __ <   |   |    |  |    __/\     /
 |_____/|_______|______/_______|_______|___|    |___|
 """
+
+
+def parse_arguments():
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(description="Start the MicroPython debug server and load a module for attach.")
+    # Named arguments
+    parser.add_argument("--module", default="main", dest="module", help="Target module to debug")
+    parser.add_argument("--method", default="main", dest="method", help="Target method to call")
+    parser.add_argument("--port", default=5678, dest="port", type=int, help="Port for debugpy server")
+    parser.add_argument(
+        "--delay", type=int, default=2, help="Delay in seconds before calling target method (default: 2)"
+    )
+
+    args = parser.parse_args()
+
+    return args.module, args.method, args.port, args.delay
+
+
 def waitfor_debugger():
     print(_banner)
     print("MicroPython VS Code Debugging Test")
     print("==================================")
-    nargs = len(sys.argv) - 1
-    target_module = "target"
-    target_method = "main"
-    port = 5678  # Default port for debugpy
-    if nargs > 0:
-        target_module = sys.argv[1]
-        if nargs > 1:
-            target_method = sys.argv[2]
-            if nargs > 2:
-                port = sys.argv[3]
-                if nargs > 3:
-                    raise ValueError(
-                        "Too many arguments provided. Usage: start_debugpy.py [target_module] [target_method]"
-                    )
+
+    target_module, target_method, port, delay = parse_arguments()
+
     print(f"Target module: {target_module}")
     print(f"Target method: {target_method}")
     print(f"Listening port: {port}")
+    print(f"Delay before execution: {delay} seconds")
     print("==================================")
     # Start debug server
     try:
@@ -53,8 +62,8 @@ def waitfor_debugger():
         debugpy.debug_this_thread()
 
         # Give VS Code a moment to set breakpoints after attach
-        print("\nGiving VS Code time to set breakpoints...")
-        time.sleep(2)
+        print(f"\nGiving VS Code {delay} seconds to set breakpoints...")
+        time.sleep(delay)
 
         _method = getattr(_target, target_method, None)
         if _method is None:
@@ -71,10 +80,9 @@ def waitfor_debugger():
             print("Result:", result)
 
     except KeyboardInterrupt:
-        print("\nTest interrupted by user")
+        print("\nDebugging interrupted by user")
     except Exception as e:
         print(f"Error: {e}")
-
 
 
 waitfor_debugger()

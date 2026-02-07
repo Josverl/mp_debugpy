@@ -49,7 +49,7 @@ def tgt_module(request):
     Fixture to provide the module name for the test.
     Can be parameterized to use different modules.
     """
-    return request.param if hasattr(request, "param") else "target"
+    return request.param if hasattr(request, "param") else "basic"
 
 
 @pytest.fixture()
@@ -59,6 +59,14 @@ def tgt_method(request):
     Can be parameterized to use different methods.
     """
     return request.param if hasattr(request, "param") else "main"
+
+@pytest.fixture()
+def tgt_src_folder(request):
+    """
+    Fixture to provide relative source path for the target module.
+    """
+    _default = "tests/data"
+    return request.param or _default if hasattr(request, "param") else _default
 
 
 @pytest.fixture()
@@ -71,10 +79,19 @@ def in_terminal(request):
     default = False
     return request.param if hasattr(request, "param") else default
 
+@pytest.fixture
+def attach_delay(request):
+    # attach
+    if hasattr(request, "param"):
+        yield request.param
+    else:
+        # Default value if not parameterized
+        yield 2
 
 @pytest.fixture()
 def micropython_debuggee(
     pytestconfig,
+    tgt_src_folder: str,
     tgt_module: str,
     tgt_method: str,
     free_tcp_port: int,
@@ -94,14 +111,30 @@ def micropython_debuggee(
     micropython_path = root_path / "firmware/unix_settrace_save_names/micropython"
     launcher_path = root_path / "launcher/start_debugpy.py"
     micropython_lib_path = root_path / "micropython-lib/python-ecosys/debugpy"
-    src_path = root_path / "src"
+    src_path = root_path / tgt_src_folder
+
+    # Ensure the paths exist
+    if not micropython_path.exists():
+        pytest.fail(f"MicroPython path does not exist: {micropython_path}")
+    if not launcher_path.exists():
+        pytest.fail(f"Launcher path does not exist: {launcher_path}")
+    if not micropython_lib_path.exists():
+        pytest.fail(f"MicroPython library path does not exist: {micropython_lib_path}")
+    if not src_path.exists():
+        pytest.fail(f"Source path does not exist: {src_path}")
 
     # Set up the environment
     env = os.environ.copy()
     env["MICROPYPATH"] = f"{src_path}:{micropython_lib_path}:~/.micropython/lib:/usr/lib/micropython"
 
     # Command to start the MicroPython process
-    command = [str(micropython_path), str(launcher_path), tgt_module, tgt_method, str(free_tcp_port)]
+    command = [
+        str(micropython_path),
+        str(launcher_path),
+        f"--module {tgt_module}",
+        f"--method {tgt_method}",
+        f"--port {str(free_tcp_port)}",
+    ]
 
     if in_terminal:
         # Make the subprocess visible in a new terminal window

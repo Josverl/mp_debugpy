@@ -5,7 +5,15 @@ import pytest
 from helpers import wait_for_msg
 
 
-def test_debug_initialize(fake_vscode_server, tgt_module):
+@pytest.mark.parametrize(
+    "tgt_method",
+    [
+        "main",
+        "foo",
+    ],
+    indirect=True,
+)
+def test_debug_initialize(fake_vscode_server, tgt_module, tgt_method):
     """
     Test with default parameters.
     """
@@ -49,7 +57,7 @@ def test_debug_initialize(fake_vscode_server, tgt_module):
     "tgt_module, tgt_method",
     [
         ("notexistent", "main"),
-        ("target", "not_a_method"),
+        ("basic", "not_a_method"),
     ],
     indirect=True,
 )
@@ -112,16 +120,6 @@ def test_debug_req_threads(fake_vscode_server, tgt_module):
     wait_for_msg(server, response="threads")
     threads_response = [msg for msg in server.rcv_messages if msg.type == "response" and msg.command == "threads"]
 
-    # process the response
-    # for _ in range(500):
-    #     time.sleep(0.01)
-    #     server.run_single()
-    #     threads_response = [msg for msg in server.rcv_messages if msg.type == "response" and msg.command == "threads"]
-    #     if threads_response:
-    #         print(f"Received  response after {_ * 0.01} seconds")
-    #         break
-
-    # check threads response
 
     assert len(threads_response) == 1, f"Expected 1 threads response, got {len(threads_response)}"
 
