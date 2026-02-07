@@ -24,6 +24,9 @@ def main():
         print(f"Iteration {i}: x = {x}")
     print("Done...")  # <-- Breakpoint
 
+    # temp hardstop for debugging the debugger tests
+    input("Press Enter to continue...")
+
 
 if __name__ == "__main__":
     main()

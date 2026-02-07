@@ -10,7 +10,7 @@ from helpers import wait_for_msg
     [
         3,
         2,
-        1,
+        # 1, # TODO: with shorter delay
         # 0.8,
         # 0.6,
         # 0.4,

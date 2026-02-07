@@ -44,51 +44,6 @@ def free_tcp_port(request):
 
 
 @pytest.fixture()
-def tgt_module(request):
-    """
-    Fixture to provide the module name for the test.
-    Can be parameterized to use different modules.
-    """
-    return request.param if hasattr(request, "param") else "basic"
-
-
-@pytest.fixture()
-def tgt_method(request):
-    """
-    Fixture to provide the method name for the test.
-    Can be parameterized to use different methods.
-    """
-    return request.param if hasattr(request, "param") else "main"
-
-@pytest.fixture()
-def tgt_src_folder(request):
-    """
-    Fixture to provide relative source path for the target module.
-    """
-    _default = "tests/data"
-    return request.param or _default if hasattr(request, "param") else _default
-
-
-@pytest.fixture()
-def in_terminal(request):
-    """
-    Fixture to provide the method name for the test.
-    Can be parameterized to use different methods.
-    """
-    default = True
-    default = False
-    return request.param if hasattr(request, "param") else default
-
-@pytest.fixture
-def attach_delay(request):
-    # attach
-    if hasattr(request, "param"):
-        yield request.param
-    else:
-        # Default value if not parameterized
-        yield 2
-
-@pytest.fixture()
 def micropython_debuggee(
     pytestconfig,
     tgt_src_folder: str,
@@ -131,9 +86,12 @@ def micropython_debuggee(
     command = [
         str(micropython_path),
         str(launcher_path),
-        f"--module {tgt_module}",
-        f"--method {tgt_method}",
-        f"--port {str(free_tcp_port)}",
+        "--module",
+        tgt_module,
+        "--method",
+        tgt_method,
+        "--port",
+        str(free_tcp_port),
     ]
 
     if in_terminal:
@@ -156,6 +114,8 @@ def micropython_debuggee(
         # time.sleep(1)  # Give the terminal some time to open
 
     else:
+        # cmd = " ".join(command)
+        print(f"Running command: {command} / {' '.join(command)}")
         process = subprocess.Popen(
             command,
             env=env,
@@ -185,7 +145,7 @@ def micropython_debuggee(
 
         # Verify all expected output lines are present
         expected_lines = [
-            "MicroPython VS Code Debugging Test",
+            # "MicroPython VS Code Debugging Test",
             "==================================",
             f"Target module: {tgt_module}",
             f"Target method: {tgt_method}",

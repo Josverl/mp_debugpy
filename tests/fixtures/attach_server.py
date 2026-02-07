@@ -1,36 +1,17 @@
-import os
 import sys
-
-# Add the tests directory to sys.path to enable absolute imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-
 import time
 from pathlib import Path
 from typing import List
 
 import pytest
-from helpers import PerfServer
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parent))
+# Import PerfServer from helpers after modifying sys.path
+from helpers import PerfServer  # noqa: E402
 
 
-# simple fixtures to provide defaults
-@pytest.fixture
-def local_root(request):
-    # attach
-    if hasattr(request, "param"):
-        yield request.param
-    else:
-        # Default value if not parameterized
-        yield "./src"
 
-
-@pytest.fixture
-def remote_root(request):
-    # attach
-    if hasattr(request, "param"):
-        yield request.param
-    else:
-        # Default value if not parameterized
-        yield "./src"
 
 
 @pytest.fixture
@@ -63,33 +44,31 @@ def attach_server(
 
     client = server.client
 
+    attach_req = {
+        "name": "Attach to MicroPython",
+        # "preLaunchTask": "foo_bar",
+        "type": "debugpy",
+        "request": "attach",
+        "connect": {"host": "localhost", "port": free_tcp_port},
+        "pathMappings": [
+            {
+                "localRoot": local_root,
+                "remoteRoot": remote_root,
+            }
+        ],
+        "workspaceFolder": "/home/jos/mp_debugpy",
+        "justMyCode": True,
+        "logToFile": logToFile,
+        # "__configurationTarget": 6,
+        "clientOS": "unix",
+        "debugOptions": [
+            "RedirectOutput",
+            "ShowReturnValue",
+        ],
+        "showReturnValue": True,
+        "__sessionId": "11976c7b-f770-484d-a445-115e82e3abcb",
+    }
     # Start of test
-    client.send_request(
-        "attach",
-        {
-            "name": "Attach to MicroPython",
-            # "preLaunchTask": "foo_bar",
-            "type": "debugpy",
-            "request": "attach",
-            "connect": {"host": "localhost", "port": free_tcp_port},
-            "pathMappings": [
-                {
-                    "localRoot": local_root,
-                    "remoteRoot": remote_root,
-                }
-            ],
-            "workspaceFolder": "/home/jos/mp_debugpy",
-            "justMyCode": True,
-            "logToFile": logToFile,
-            # "__configurationTarget": 6,
-            "clientOS": "unix",
-            "debugOptions": [
-                "RedirectOutput",
-                "ShowReturnValue",
-            ],
-            "showReturnValue": True,
-            "__sessionId": "11976c7b-f770-484d-a445-115e82e3abcb",
-        },
-    )
+    client.send_request("attach", attach_req)
     # do not add a wait or processing at this point
     yield server

@@ -15,34 +15,6 @@ from helpers import PerfServer
 
 
 
-@pytest.fixture
-def logToFile(request):
-    # attach
-    if hasattr(request, "param"):
-        yield request.param
-    else:
-        # Default value if not parameterized
-        yield False
-
-
-@pytest.fixture
-def source_file(request):
-    # set_breakpoints
-    if hasattr(request, "param"):
-        yield request.param
-    else:
-        # Default value if not parameterized
-        yield "target.py"
-
-
-@pytest.fixture
-def bp_lines(request):
-    # set_breakpoints
-    if hasattr(request, "param"):
-        yield request.param
-    else:
-        # Default value if not parameterized
-        yield [78, 89, 90]
 
 
 @pytest.fixture
