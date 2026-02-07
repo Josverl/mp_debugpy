@@ -35,7 +35,7 @@ def parse_arguments():
 
 def waitfor_debugger():
     print(_banner)
-    print("MicroPython VS Code Debugging Test")
+    print("MicroPython VS Code Debugging V0.3")
     print("==================================")
 
     target_module, target_method, port, delay = parse_arguments()
