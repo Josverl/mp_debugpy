@@ -5,4 +5,4 @@
 [submodule "micropython"]
 	path = micropython
 	url = https://github.com/josverl/micropython.git
-	branch = pdb_support_localvars
+	branch = pdb_support_jos
