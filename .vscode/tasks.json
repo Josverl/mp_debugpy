@@ -214,11 +214,11 @@
         },
         {
             "label": "mp_unix_module",
-            "detail": "MicroPython Unix - Module via start_debugpy.py",
+            "detail": "MicroPython Unix - Module via mpy_launch_debugpy_unix.py",
             "type": "shell",
             "command": "${workspaceFolder}/firmware/${MP_DEBUG_VARIANT}/micropython",
             "args": [
-                "${workspaceFolder}/launcher/start_debugpy.py",
+                "${workspaceFolder}/launcher/mpy_launch_debugpy_unix.py",
                 "${fileBasenameNoExtension}"
             ],
             "isBackground": true,
@@ -251,12 +251,12 @@
         },
         {
             "label": "mp_esp32_upload_src",
-            "detail": "MicroPython ESP32 - launcher/upload_src.sh/.ps1",
+            "detail": "MicroPython ESP32 - launcher/upload_all.py",
             "type": "shell",
-            "command": "${workspaceFolder}/launcher/upload_src.sh",
-            "windows": {
-                "command": "${workspaceFolder}/launcher/upload_src.ps1"
-            },
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/launcher/upload_all.py"
+            ],
             "isBackground": true,
             "presentation": {
                 "focus": true,

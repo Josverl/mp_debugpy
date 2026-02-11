@@ -1,59 +1,74 @@
 """Start the MicroPython debug server for VS Code debugging."""
+
 import sys
-import time
 
-import debugpy
+import network
 
-# Set sys.path to include the scratch/launcher directory.
-sys.path.insert(0, '.')
-sys.path.insert(1, "micropython-lib/python-ecosys/debugpy")
+try:
+    sys.gettrace()  # Ensure sys.settrace is available
+except AttributeError:
+    print("sys.settrace is not available. You need a firmware compiled with debugging features.")
+    sys.exit(1)
 
+try:
+    import debugpy
+except ImportError:
+    print("debugpy module not found. Make sure to install")
+    sys.exit(1)
+
+wlan = network.WLAN()
 _banner = r"""
- _____  _______ ______ _______ _______ ______ ___ ___
+ _____  _______ ______ _______ _______ ______ ___ ___ 
 |     \|    ___|   __ \   |   |     __|   __ \   |   |
-|  --  |    ___|   __ <   |   |    |  |    __/\     /
-|_____/|_______|______/_______|_______|___|    |___|
+|  --  |    ___|   __ <   |   |    |  |    __/\     / 
+|_____/|_______|______/_______|_______|___|    |___|  
 """
+
+
 def waitfor_debugger():
     print(_banner)
     print("MicroPython VS Code Debugging Test")
+    print("Usage: mpy_launch_debugpy_esp32.py [target_module] [target_method]")
     print("==================================")
     nargs = len(sys.argv) - 1
     target_module = "target"
     target_method = "main"
-    port = 5678  # Default port for debugpy
     if nargs > 0:
         target_module = sys.argv[1]
         if nargs > 1:
             target_method = sys.argv[2]
             if nargs > 2:
-                port = sys.argv[3]
-                if nargs > 3:
-                    raise ValueError(
-                        "Too many arguments provided. Usage: start_debugpy.py [target_module] [target_method]"
-                    )
+                raise ValueError("Too many arguments provided.")
     print(f"Target module: {target_module}")
     print(f"Target method: {target_method}")
-    print(f"Listening port: {port}")
+    try:
+        print(f"mdns         : {wlan.config('dhcp_hostname')}.local")
+    except Exception as e:
+        print(f"ip           : {wlan.ipconfig('addr4')[0]}")
     print("==================================")
     # Start debug server
     try:
-        debugpy.listen(host="0.0.0.0", port=int(port))
-        print(f"Debug server attached on 0.0.0.0:{port}")
+        ipv4 = wlan.ipconfig("addr4")[0]
+
+        debugpy.listen(host=ipv4, port=5678)
+        print("Debug server attached on 127.0.0.1:5678")
         print("Connecting back to VS Code debugger now...")
 
-        _target = __import__(target_module, None, None, ("*"))
-        _method = getattr(_target, target_method, None)
-        if _method is None:
-            raise ImportError(f"Method '{target_method}' not found in module '{target_module}'")
+        try:
+            # import target as _target
+            _target = __import__(target_module, None, None, ("*"))
+        except ImportError as e:
+            print(f"Error importing target module '{target_module}': {e}")
+            raise ImportError(f"Could not import target module '{target_module}'") from e
 
-        # import target as target_main
-        print("waiting at debugpy.breakpoint()")
         debugpy.breakpoint()
+
         debugpy.debug_this_thread()
 
         # Give VS Code a moment to set breakpoints after attach
         print("\nGiving VS Code time to set breakpoints...")
+        import time
+
         time.sleep(2)
 
         _method = getattr(_target, target_method, None)
@@ -74,7 +89,6 @@ def waitfor_debugger():
         print("\nTest interrupted by user")
     except Exception as e:
         print(f"Error: {e}")
-
 
 
 waitfor_debugger()

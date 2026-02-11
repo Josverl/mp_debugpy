@@ -32,5 +32,6 @@
         "**/.venv": true,
         "**/micropython/lib/micropython-lib": true
     },
+    "sarif-viewer.connectToGithubCodeScanning": "off",
 
 }

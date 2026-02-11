@@ -48,7 +48,7 @@ How to measure:
 
 
 ```
-docker run -it --rm -p 5678:5678 -v ./src:/usr/micropython -v ./launcher:/usr/lib/micropython -v ./micropython-lib/python-ecosys/debugpy:/root/.micropython/lib micropython/debugpy:latest -m start_debugpy run_pystone main 
+docker run -it --rm -p 5678:5678 -v ./src:/usr/micropython -v ./launcher:/usr/lib/micropython -v ./micropython-lib/python-ecosys/debugpy:/root/.micropython/lib micropython/debugpy:latest -m mpy_launch_debugpy_unix run_pystone main 
 
  _____  _______ ______ _______ _______ ______ ___ ___
 |     \|    ___|   __ \   |   |     __|   __ \   |   |

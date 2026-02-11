@@ -2,6 +2,46 @@
 
 A minimal **experimental** implementation of debugpy for MicroPython, enabling remote debugging with VS Code and other Debug Adapter Protocol (DAP) compatible debuggers.
 
+The setup of this configuration is rather complex as it requires Open PRs across multiple repos to implement.
+
+
+- MicroPython repo
+
+    [MicroPython-PR8767](https://github.com/micropython/micropython/pull/8767) Improve sys.settrace to help support debugpy / pdb debugging
+
+    This PR enhances the `sys.settrace()` functionality in MicroPython to support better debugging capabilities, including variable inspection and improved stack frame information.
+
+    You need to build a firmware with `MICROPY_PY_SYS_SETTRACE=1` enabled
+
+
+- Micropython Lib repo
+    [MicroPython-lib-PR#1022](https://github.com/micropython/micropython-LIB/pull/1022) - python-ecosys/debugpy: Add VS Code debugging support for MicroPython.
+
+    This PR implements the debugpy module, allowing DAP debuggers such as VSCode to connect to MicroPython for debugging sessions. 
+    The implementation includes support for breakpoints, stepping, stack inspection, and variable modification.
+
+    This module is not frozen into the firmware by default, but could be included in custom builds.
+    to use the debugpy module, you need to : 
+    - install it to your MCU or make it available in the path for the unix builds
+        ```
+        python launcher/compile_debugpy.py
+        mpremote mip install launcher/debugpy_mpy.json
+        ```
+
+- This repo contains the sample code, configurations, and documentation for using VSCode and debugpy with MicroPython. 
+
+    in order to debug MicroPython code with VS Code, you need to:
+    - load the firmware on an MCU 
+    - install the ``debugpy`` module to the MCU 
+    - have your source code copied to the MCU (does not work with mpremote mount, you need to copy the files to the MCU filesystem )
+    - have the MCU connected to a network that your development machine can access (for remote debugging)
+    - start the debugpy and set a breakpoint, either using `mpremote run mpy_launch_debug,xxx.py` , or by setting this up in your code 
+    - and connect to it from VS Code
+
+    The debug configurations need to properly correlate the (different) locations of the source files 
+    - on the host machine (VS Code) ( the workspace folder /src)
+    - and on the target (The root of the filesystem, or a subfolder) 
+
 ## Quick Start
 
 ### 1. Basic Setup
@@ -181,7 +221,7 @@ flowchart LR
 
     subgraph Tasks
         mp_unix_file["Run Current File"]
-        mp_unix_launcher["Run start_debugpy.py"]
+        mp_unix_launcher["Run mpy_launch_debugpy_unix.py"]
         mp_esp32_upload["Upload & Run ESP32"]
         DAP_monitor["DAP Protocol Monitor"]
     end

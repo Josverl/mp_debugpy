@@ -6,4 +6,4 @@ docker run -it --rm -p 5678:5678 \
     -v ./launcher:/usr/lib/micropython \
     -v ./micropython-lib/python-ecosys/debugpy:/root/.micropython/lib \
     "$CONTAINER_NAME" \
-    -m start_debugpy run_pystone main
+    -m mpy_launch_debugpy_unix run_pystone main

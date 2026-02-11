@@ -92,7 +92,7 @@ def micropython_debuggee(
 
     # Construct absolute paths
     micropython_path = root_path / "firmware/unix_settrace_save_names/micropython"
-    launcher_path = root_path / "launcher/start_debugpy.py"
+    launcher_path = root_path / "launcher/mpy_launch_debugpy_unix.py"
     micropython_lib_path = root_path / "micropython-lib/python-ecosys/debugpy"
     src_path = root_path / "src"
 

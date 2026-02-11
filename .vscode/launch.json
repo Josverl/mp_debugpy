@@ -93,15 +93,30 @@
             "preLaunchTask": "mp_unix_module",
         },
         {
+            "name": "MP ESP32 - Attach",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "192.168.137.117",
+                "host_n": "my-esp32.local",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/src",
+                    "remoteRoot": "/"
+                }
+            ],
+            "logToFile": true,
+            "justMyCode": false,
+            // "preLaunchTask": "mp_esp32_upload_src",
+        },
+        {
             "name": "MP ESP32 - module",
             "type": "debugpy",
             "request": "attach",
-            // "connect": {
-            //     "host": "localhost",
-            //     "port": 5679
-            // },
             "connect": {
-                "host": "debugee_esp32.local",
+                "host": "my-esp32.local",
                 "port": 5678
             },
             "pathMappings": [

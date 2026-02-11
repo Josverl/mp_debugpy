@@ -7,5 +7,5 @@ ENTRYPOINT ["/usr/local/bin/micropython"]
 
 
 # docker build -t micropython/debugpy:0.4 -t micropython/debugpy:latest .
-# docker run -it --rm -p 5678:5678 -v ./src:/usr/micropython -v ./launcher:/usr/lib/micropython -v ./micropython-lib/python-ecosys/debugpy:/root/.micropython/lib micropython/debugpy:latest -m start_debugpy run_pystone main 
+# docker run -it --rm -p 5678:5678 -v ./src:/usr/micropython -v ./launcher:/usr/lib/micropython -v ./micropython-lib/python-ecosys/debugpy:/root/.micropython/lib micropython/debugpy:latest -m mpy_launch_debugpy_unix run_pystone main 
 
