@@ -2,31 +2,67 @@
 
 A minimal **experimental** implementation of debugpy for MicroPython, enabling remote debugging with VS Code and other Debug Adapter Protocol (DAP) compatible debuggers.
 
-The setup of this configuration is rather complex as it requires Open PRs across multiple repos to implement.
+The setup of this configuration is rather complex as it requires Open PRs across multiple repos to implement, 
+and there are multiple variations and features tested out.
+
+This Repo uses git submodules to link to the relevant PRs in the MicroPython and MicroPython-lib repositories, and contains the sample code, configurations, and documentation for using VSCode and debugpy with MicroPython.
+```
+[submodule "micropython"]
+	path = micropython
+	url = https://github.com/josverl/micropython.git
+	branch = pdb_support_jos
+
+[submodule "micropython-lib"]
+	path = micropython-lib
+	url = https://github.com/josverl/micropython-lib.git
+	branch = debugpy/jos
+```
 
 
 - MicroPython repo
 
+    The `josverl/micropython/pdb_support_jos` branch is based on : 
+
     [MicroPython-PR8767](https://github.com/micropython/micropython/pull/8767) Improve sys.settrace to help support debugpy / pdb debugging
 
-    This PR enhances the `sys.settrace()` functionality in MicroPython to support better debugging capabilities, including variable inspection and improved stack frame information.
+    and contains additional features :
+        - inspection of local variables (with or without name preservation, depending on the configuration flags)
 
-    You need to build a firmware with `MICROPY_PY_SYS_SETTRACE=1` enabled
+    You need to build a firmware for the relevant port/board/variant with `MICROPY_PY_SYS_SETTRACE=1` enabled
 
 
 - Micropython Lib repo
-    [MicroPython-lib-PR#1022](https://github.com/micropython/micropython-LIB/pull/1022) - python-ecosys/debugpy: Add VS Code debugging support for MicroPython.
 
-    This PR implements the debugpy module, allowing DAP debuggers such as VSCode to connect to MicroPython for debugging sessions. 
-    The implementation includes support for breakpoints, stepping, stack inspection, and variable modification.
+    The `josverl/micropython-lib/debugpy/jos` branch is based on :
+
+    [MicroPython-lib-PR#1022](https://github.com/micropython/micropython-lib/pull/1022) - python-ecosys/debugpy: Add VS Code debugging support for MicroPython.
+        This PR implements the debugpy module, allowing DAP debuggers such as VSCode to connect to MicroPython for debugging sessions. 
+        The implementation includes support for breakpoints, stepping, stack inspection, and variable modification.
+
+    the branch contains the additional features:
+    - debugpy
+        - handle complex variables ( objects, lists, dicts) with limited expansion )
+        - handle bare meatal ports ( ESP32 )
+        - improve path mapping between host and target
+        - Add Pause functionality to interrupt Pauze running code
+        - Allow setting/changing global and local variables on the debug target 
+        - performance improvements
+            - optimize breakpoint handling
+            - Use `const()` to define DAP strings
+            - avoid method access
+    - dab Monitor
+        - add cli to handle different ports/boards
+
 
     This module is not frozen into the firmware by default, but could be included in custom builds.
     to use the debugpy module, you need to : 
+
     - install it to your MCU or make it available in the path for the unix builds
         ```
         python launcher/compile_debugpy.py
         mpremote mip install launcher/debugpy_mpy.json
         ```
+    I suggest using the cross-compiled version to save memory and reduce the time spent on compilation on the device, but you can also use `mpremote mip install launcher/debugpy.json` for the uncompiled version if you prefer.
 
 - This repo contains the sample code, configurations, and documentation for using VSCode and debugpy with MicroPython. 
 
@@ -45,6 +81,13 @@ The setup of this configuration is rather complex as it requires Open PRs across
 ## Quick Start
 
 ### 1. Basic Setup
+
+- Build and flash MicroPython firmware with `MICROPY_PY_SYS_SETTRACE=1` enabled
+- Install `debugpy` module on the target device
+- Copy your source code to the target device (e.g., using `mpremote cp`)
+- Ensure the target device is network-accessible (connected to WiFi / LAN ) for remote debugging
+
+### 2. on debug target: Wait for debugger
 
 ```python
 import debugpy
@@ -95,7 +138,7 @@ Create a `.vscode/launch.json` file in your project:
 }
 ```
 
-### 3. Start Debugging
+### 3. Start Debugger from Host and connect to the target
 
 1. Run your MicroPython script with debugpy
 2. In VS Code, press `F5` or use "Run and Debug" to attach
@@ -108,6 +151,8 @@ Create a `.vscode/launch.json` file in your project:
 Build MicroPython Unix port with debugging support:
 
 ```bash
+# check put the correct forek/branch 
+cd micropython 
 cd ports/unix
 make CFLAGS_EXTRA="-DMICROPY_PY_SYS_SETTRACE=1"
 ```
