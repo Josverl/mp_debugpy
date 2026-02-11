@@ -1,0 +1,50 @@
+{
+    "readme": "https://github.com/Josverl/mp_debugpy",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jos Verlinde",
+            "email": "jos_verlinde@hotmail.com"
+        }
+    ],
+    "urls": [
+        [
+            "dap_monitor.py",
+            "../micropython-lib/python-ecosys/debugpy/dap_monitor.py"
+        ],
+        [
+            "debugpy/__init__.py",
+            "../micropython-lib/python-ecosys/debugpy/debugpy/__init__.py"
+        ],
+        [
+            "debugpy/public_api.py",
+            "../micropython-lib/python-ecosys/debugpy/debugpy/public_api.py"
+        ],
+        [
+            "debugpy/common/__init__.py",
+            "../micropython-lib/python-ecosys/debugpy/debugpy/common/__init__.py"
+        ],
+        [
+            "debugpy/common/constants.py",
+            "../micropython-lib/python-ecosys/debugpy/debugpy/common/constants.py"
+        ],
+        [
+            "debugpy/common/messaging.py",
+            "../micropython-lib/python-ecosys/debugpy/debugpy/common/messaging.py"
+        ],
+        [
+            "debugpy/server/__init__.py",
+            "../micropython-lib/python-ecosys/debugpy/debugpy/server/__init__.py"
+        ],
+        [
+            "debugpy/server/debug_session.py",
+            "../micropython-lib/python-ecosys/debugpy/debugpy/server/debug_session.py"
+        ],
+        [
+            "debugpy/server/pdb_adapter.py",
+            "../micropython-lib/python-ecosys/debugpy/debugpy/server/pdb_adapter.py"
+        ]
+    ],
+    "deps": [],
+    "version": "0.1.0"
+}

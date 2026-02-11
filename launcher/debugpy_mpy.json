@@ -1,0 +1,50 @@
+{
+    "readme": "https://github.com/Josverl/mp_debugpy",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jos Verlinde",
+            "email": "jos_verlinde@hotmail.com"
+        }
+    ],
+    "urls": [
+        [
+            "dap_monitor.mpy",
+            "compiled/dap_monitor.mpy"
+        ],
+        [
+            "debugpy/__init__.mpy",
+            "compiled/debugpy/__init__.mpy"
+        ],
+        [
+            "debugpy/public_api.mpy",
+            "compiled/debugpy/public_api.mpy"
+        ],
+        [
+            "debugpy/common/__init__.mpy",
+            "compiled/debugpy/common/__init__.mpy"
+        ],
+        [
+            "debugpy/common/constants.mpy",
+            "compiled/debugpy/common/constants.mpy"
+        ],
+        [
+            "debugpy/common/messaging.mpy",
+            "compiled/debugpy/common/messaging.mpy"
+        ],
+        [
+            "debugpy/server/__init__.mpy",
+            "compiled/debugpy/server/__init__.mpy"
+        ],
+        [
+            "debugpy/server/debug_session.mpy",
+            "compiled/debugpy/server/debug_session.mpy"
+        ],
+        [
+            "debugpy/server/pdb_adapter.mpy",
+            "compiled/debugpy/server/pdb_adapter.mpy"
+        ]
+    ],
+    "deps": [],
+    "version": "0.1.0"
+}

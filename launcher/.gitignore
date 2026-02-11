@@ -1,0 +1,3 @@
+# do not check-in any cross compiled .mpy files
+debugpy/*.mpy
+**/*.mpy

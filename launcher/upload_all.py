@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Upload source files and debugpy to ESP32 device."""
+"""
+This script compiles the debugpy source files to .mpy format and installs the compiled files to the ESP32 device
+using mpremote mip install.
+It also uploads the source files to the device for debugging purposes.
+"""
 
 import subprocess
 import sys
-import do_mpy_cross
+import compile_debugpy
 
 
 def run_command(cmd: list[str] | str, use_shell: bool = False) -> int:
@@ -19,7 +23,7 @@ def run_command(cmd: list[str] | str, use_shell: bool = False) -> int:
 def main():
     """Upload debugpy and source files to ESP32."""
     # TODO: Only compile and upload files that have changed since last upload
-    if do_mpy_cross.main() != 0:
+    if compile_debugpy.main() != 0:
         print("Error: Failed to compile files", file=sys.stderr)
         return 1
 
@@ -32,11 +36,6 @@ def main():
     # Copy the src directory to the root of the ESP32 filesystem
     if run_command("mpremote cp -r src/ :/", use_shell=True) != 0:
         print("Error: Failed to copy source files", file=sys.stderr)
-        return 1
-
-    # Start the debugpy server on the ESP32
-    if run_command(["mpremote", "run", "launcher/start_debugpy_esp32.py"]) != 0:
-        print("Error: Failed to start debugpy server", file=sys.stderr)
         return 1
 
     return 0
